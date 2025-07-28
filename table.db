@@ -1,0 +1,17 @@
+-- logs table
+CREATE TABLE logs (
+    id BIGSERIAL PRIMARY KEY,
+    data JSONB NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- current table
+CREATE TABLE current (
+    id BIGSERIAL PRIMARY KEY,
+    data JSONB NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- To keep only one row in 'current', use UPSERT logic in backend:
+-- INSERT INTO current (id, data, updated_at) VALUES (1, '{...}', NOW())
+-- ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = EXCLUDED.updated_at;

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERWER API Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #b3c6f7 0%, #e3ecfc 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(42,82,152,0.08);
+            padding: 2.5rem 2rem;
+        }
+        h1, h2, h3 {
+            color: #2a5298;
+            margin-top: 0;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+        h2 {
+            font-size: 1.4rem;
+            margin-top: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        h3 {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.7rem;
+        }
+        pre, code {
+            background: #f3f6fa;
+            color: #1a237e;
+            border-radius: 8px;
+            padding: 0.7em 1em;
+            font-size: 1em;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            overflow-x: auto;
+        }
+        .section {
+            margin-bottom: 2.5rem;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .table th, .table td {
+            border: 1px solid #e0e0e0;
+            padding: 0.7em 0.5em;
+            text-align: left;
+        }
+        .table th {
+            background: #e3ecfc;
+            color: #2a5298;
+            font-weight: 600;
+        }
+        .table tr:nth-child(even) {
+            background: #f7faff;
+        }
+        .param-list {
+            margin: 0.5em 0 1.5em 0;
+            padding-left: 1.2em;
+        }
+        .param-list li {
+            margin-bottom: 0.5em;
+        }
+        .note {
+            background: #fffbe6;
+            border-left: 4px solid #ffd700;
+            padding: 1em;
+            border-radius: 8px;
+            margin: 1.5em 0;
+            color: #92400e;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem 0.5rem;
+            }
+            pre, code {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ PERWER Energy API Documentation</h1>
+        <div class="section">
+            <h2>Architecture Overview</h2>
+            <ul class="param-list">
+                <li><b>Hardware</b> sends live energy & environment data to the Python backend.</li>
+                <li><b>Backend</b> parses and uploads that data to Supabase.</li>
+                <li><b>Frontend</b> connects directly to Supabase to fetch the latest readings for the dashboard.</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Base URL</h2>
+            <pre>https://perwer.onrender.com/api</pre>
+        </div>
+        <div class="section">
+            <h2>1. POST <code>/data</code> – Send Real-Time Hardware Data to Backend</h2>
+            <p><b>Description:</b> Used by energy hardware to send live sensor readings (solar, battery, load, environment) to the backend. The backend parses the incoming data and inserts it into the Supabase database.</p>
+            <p><b>Auth:</b> None (consider restricting by IP, MAC, or secret key in production)</p>
+            <h3>Request Body (JSON):</h3>
+            <pre>{
+  "solar": {
+    "power_output_watts": 847,
+    "radiation_w_per_m2": 892,
+    "pv_voltage": 24.8,
+    "pv_current": 34.2,
+    "pv_temperature_c": 45
+  },
+  "battery": {
+    "soc_percent": 64,
+    "dod_percent": 36,
+    "voltage": 25.6,
+    "temperature_c": 28,
+    "current_a": 45.2,
+    "cycles": 1247,
+    "charge_mode": "BULK",
+    "time_to_full_h": 2.3,
+    "charge_rate_w": 847,
+    "target_voltage": 29.2,
+    "charge_mode_setting": "AUTO"
+  },
+  "load_generator": {
+    "current_load_kw": 2.4,
+    "load_current_a": 12.4,
+    "grid_voltage_v": 230,
+    "generator_runtime_h": 12.4,
+    "generator_status": "OFF"
+  },
+  "environment": {
+    "ambient_temperature_c": 24,
+    "humidity_percent": 68,
+    "tamper_status": "OK",
+    "smoke_status": "CLEAR",
+    "fire_alert_status": "SAFE"
+  }
+}</pre>
+            <h3>Response (on success):</h3>
+            <pre>{
+  "status": "success",
+  "message": "Data received and stored in Supabase"
+}</pre>
+            <div class="note">
+                <ul>
+                    <li>The backend should add a timestamp before inserting into Supabase.</li>
+                    <li>Data is structured and validated before storage.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2>2. Frontend Data Access – Supabase Integration (Client-Side)</h2>
+            <p><b>Description:</b> The frontend does not call the backend directly. Instead, it connects to Supabase to fetch the latest data and display it on the dashboard.</p>
+            <h3>Supabase Usage (JavaScript Example):</h3>
+            <pre>import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient('https://YOUR_SUPABASE_URL', 'YOUR_PUBLIC_ANON_KEY');
+
+async function fetchDashboardData() {
+  const { data, error } = await supabase
+    .from('energy_data')
+    .select('*')
+    .order('timestamp', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Failed to fetch:", error);
+    return;
+  }
+
+  const latest = data[0];
+
+  // Example UI updates
+  document.getElementById("solar-power").innerText = `${latest.solar.power_output_watts} W`;
+  document.getElementById("battery-soc").innerText = `${latest.battery.soc_percent}%`;
+}</pre>
+            <div class="note">
+                <ul>
+                    <li>Store solar, battery, load_generator, environment, and timestamp as JSON or structured columns.</li>
+                    <li>Use Row-Level Security (RLS) for client-safe public access (read-only).</li>
+                    <li>Optionally implement a realtime listener via Supabase’s <code>on('INSERT')</code> feature for live updates.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2>JSON Data Parameters Reference</h2>
+            <h3>Solar</h3>
+            <ul class="param-list">
+                <li><b>power_output_watts</b>: Current solar power output in watts. Example: 0–5000; e.g. 847</li>
+                <li><b>radiation_w_per_m2</b>: Solar irradiance in watts per square meter. Example: 0–1200; e.g. 892</li>
+                <li><b>pv_voltage</b>: Photovoltaic panel voltage in volts. Example: 0–60; e.g. 24.8</li>
+                <li><b>pv_current</b>: PV panel current in amperes. Example: 0–50; e.g. 34.2</li>
+                <li><b>pv_temperature_c</b>: PV panel temperature in Celsius. Example: -20–80; e.g. 45</li>
+            </ul>
+            <h3>Battery</h3>
+            <ul class="param-list">
+                <li><b>soc_percent</b>: State of Charge, battery percentage. Example: 0–100%; e.g. 64%</li>
+                <li><b>soh_percent</b>: State of Health, battery health percentage. Example: 0–100%; e.g. 87%</li>
+                <li><b>dod_percent</b>: Depth of Discharge, battery percentage. Example: 0–100%; e.g. 36%</li>
+                <li><b>voltage</b>: Battery voltage in volts. Example: 0–60; e.g. 25.6</li>
+                <li><b>temperature_c</b>: Battery temperature in Celsius. Example: -20–60; e.g. 28</li>
+                <li><b>current_a</b>: Battery current in amperes. Example: -100–100; e.g. 45.2</li>
+                <li><b>cycles</b>: Number of charge/discharge cycles. Example: 0–10000; e.g. 1247</li>
+                <li><b>charge_mode</b>: Current battery charging mode. Example: BULK, ABSORPTION, FLOAT; e.g. BULK</li>
+                <li><b>time_to_full_h</b>: Estimated time to full charge in hours. Example: 0–24; e.g. 2.3</li>
+                <li><b>charge_rate_w</b>: Current battery charge rate in watts. Example: 0–5000; e.g. 847</li>
+                <li><b>target_voltage</b>: Target voltage for charging in volts. Example: 0–60; e.g. 29.2</li>
+                <li><b>charge_mode_setting</b>: Charging mode setting. Example: AUTO, MANUAL; e.g. AUTO</li>
+            </ul>
+            <h3>Load/Generator</h3>
+            <ul class="param-list">
+                <li><b>current_load_kw</b>: Current load in kilowatts. Example: 0–20; e.g. 2.4</li>
+                <li><b>load_current_a</b>: Load current in amperes. Example: 0–100; e.g. 12.4</li>
+                <li><b>grid_voltage_v</b>: Grid voltage in volts. Example: 0–250; e.g. 230</li>
+                <li><b>generator_runtime_h</b>: Generator runtime in hours. Example: 0–1000; e.g. 12.4</li>
+                <li><b>generator_status</b>: Generator status. Example: ON, OFF, MAINTENANCE; e.g. OFF</li>
+            </ul>
+            <h3>Environment</h3>
+            <ul class="param-list">
+                <li><b>ambient_temperature_c</b>: Ambient temperature in Celsius. Example: -40–60; e.g. 24</li>
+                <li><b>humidity_percent</b>: Ambient humidity percentage. Example: 0–100%; e.g. 68%</li>
+                <li><b>tamper_status</b>: Tamper detection status. Example: OK, TAMPERED; e.g. OK</li>
+                <li><b>smoke_status</b>: Smoke detection status. Example: CLEAR, SMOKE; e.g. CLEAR</li>
+                <li><b>fire_alert_status</b>: Fire alert status. Example: SAFE, ALERT; e.g. SAFE</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Summary Table</h2>
+            <table class="table">
+                <tr>
+                    <th>Direction</th>
+                    <th>Flow</th>
+                    <th>Method</th>
+                    <th>Actor</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>Hardware → Backend</td>
+                    <td>/api/data</td>
+                    <td>POST</td>
+                    <td>Device</td>
+                    <td>Sends raw JSON data to backend</td>
+                </tr>
+                <tr>
+                    <td>Backend → Supabase</td>
+                    <td>Internal Python integration</td>
+                    <td>–</td>
+                    <td>Backend</td>
+                    <td>Parses and stores data in Supabase</td>
+                </tr>
+                <tr>
+                    <td>Frontend ← Supabase</td>
+                    <td>Supabase JS Client</td>
+                    <td>GET</td>
+                    <td>Dashboard</td>
+                    <td>Fetches latest readings for live display</td>
+                </tr>
+            </table>
+        </div>
+        <div class="note">
+            <b>Note:</b> Build analytics API separately for AI/insight features.
+        </div>
+    </div>
+</body>
+</html>

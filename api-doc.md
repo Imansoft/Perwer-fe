@@ -117,6 +117,45 @@ async function fetchDashboardData() {
 
 ---
 
+## JSON Data Parameters Reference
+
+### Solar
+- **power_output_watts**: Current solar power output in watts. Example: 0–5000; e.g. 847
+- **radiation_w_per_m2**: Solar irradiance in watts per square meter. Example: 0–1200; e.g. 892
+- **pv_voltage**: Photovoltaic panel voltage in volts. Example: 0–60; e.g. 24.8
+- **pv_current**: PV panel current in amperes. Example: 0–50; e.g. 34.2
+- **pv_temperature_c**: PV panel temperature in Celsius. Example: -20–80; e.g. 45
+
+### Battery
+- **soc_percent**: State of Charge, battery percentage. Example: 0–100%; e.g. 64%
+- **soh_percent**: State of Health, battery health percentage. Example: 0–100%; e.g. 87%
+- **dod_percent**: Depth of Discharge, battery percentage. Example: 0–100%; e.g. 36%
+- **voltage**: Battery voltage in volts. Example: 0–60; e.g. 25.6
+- **temperature_c**: Battery temperature in Celsius. Example: -20–60; e.g. 28
+- **current_a**: Battery current in amperes. Example: -100–100; e.g. 45.2
+- **cycles**: Number of charge/discharge cycles. Example: 0–10000; e.g. 1247
+- **charge_mode**: Current battery charging mode. Example: BULK, ABSORPTION, FLOAT; e.g. BULK
+- **time_to_full_h**: Estimated time to full charge in hours. Example: 0–24; e.g. 2.3
+- **charge_rate_w**: Current battery charge rate in watts. Example: 0–5000; e.g. 847
+- **target_voltage**: Target voltage for charging in volts. Example: 0–60; e.g. 29.2
+- **charge_mode_setting**: Charging mode setting. Example: AUTO, MANUAL; e.g. AUTO
+
+### Load/Generator
+- **current_load_kw**: Current load in kilowatts. Example: 0–20; e.g. 2.4
+- **load_current_a**: Load current in amperes. Example: 0–100; e.g. 12.4
+- **grid_voltage_v**: Grid voltage in volts. Example: 0–250; e.g. 230
+- **generator_runtime_h**: Generator runtime in hours. Example: 0–1000; e.g. 12.4
+- **generator_status**: Generator status. Example: ON, OFF, MAINTENANCE; e.g. OFF
+
+### Environment
+- **ambient_temperature_c**: Ambient temperature in Celsius. Example: -40–60; e.g. 24
+- **humidity_percent**: Ambient humidity percentage. Example: 0–100%; e.g. 68%
+- **tamper_status**: Tamper detection status. Example: OK, TAMPERED; e.g. OK
+- **smoke_status**: Smoke detection status. Example: CLEAR, SMOKE; e.g. CLEAR
+- **fire_alert_status**: Fire alert status. Example: SAFE, ALERT; e.g. SAFE
+
+---
+
 ## Summary Table
 
 | Direction            | Flow                        | Method | Actor     | Description                              |
