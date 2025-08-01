@@ -51,6 +51,12 @@ async function fetchAndUpdateDashboard() {
     window.updateTamperStatus(current.environment.tamper_status);
     window.updateSmokeStatus(current.environment.smoke_status);
     window.updateFireAlertStatus(current.environment.fire_alert_status);
+
+    // In data.js, after fetching current data:
+    window.updateBatterySection(current.battery);
+    window.updateSolarSection(current.solar);
+    window.updateLoadSection(current.load_generator);
+    window.updateEnvironmentSection(current.environment);
 }
 
 // Call on page load and every 30 seconds

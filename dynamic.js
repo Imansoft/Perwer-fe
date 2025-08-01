@@ -90,6 +90,44 @@ function updateFireAlertStatus(status) {
     document.querySelector('#overview .metric-card:nth-child(4) .detail-item:nth-child(4) .detail-value').innerText = status;
 }
 
+// Battery Section
+function updateBatterySection(data) {
+    document.querySelector('#battery .metric-card:nth-child(1) .metric-value').innerText = data.soh_percent + '%';
+    document.querySelector('#battery .metric-card:nth-child(1) .detail-item:nth-child(1) .detail-value').innerText = data.cycles;
+    document.querySelector('#battery .metric-card:nth-child(1) .detail-item:nth-child(2) .detail-value').innerText = data.temperature_c + '°C';
+    document.querySelector('#battery .metric-card:nth-child(1) .detail-item:nth-child(3) .detail-value').innerText = data.voltage + 'V';
+    document.querySelector('#battery .metric-card:nth-child(1) .detail-item:nth-child(4) .detail-value').innerText = data.current_a + 'A';
+    document.querySelector('#battery .metric-card:nth-child(2) .metric-value').innerText = data.charge_mode;
+    document.querySelector('#battery .metric-card:nth-child(2) .detail-item:nth-child(1) .detail-value').innerText = data.time_to_full_h + 'h';
+    document.querySelector('#battery .metric-card:nth-child(2) .detail-item:nth-child(2) .detail-value').innerText = data.charge_rate_w + 'W';
+    document.querySelector('#battery .metric-card:nth-child(2) .detail-item:nth-child(3) .detail-value').innerText = data.target_voltage + 'V';
+    document.querySelector('#battery .metric-card:nth-child(2) .detail-item:nth-child(4) .detail-value').innerText = data.charge_mode_setting;
+}
+// Solar Section
+function updateSolarSection(data) {
+    document.querySelector('#solar .metric-card .metric-value').innerText = data.power_output_watts + 'W';
+    document.querySelector('#solar .metric-card .detail-item:nth-child(1) .detail-value').innerText = data.radiation_w_per_m2 + ' W/m²';
+    document.querySelector('#solar .metric-card .detail-item:nth-child(2) .detail-value').innerText = data.pv_voltage + 'V';
+    document.querySelector('#solar .metric-card .detail-item:nth-child(3) .detail-value').innerText = data.pv_current + 'A';
+    document.querySelector('#solar .metric-card .detail-item:nth-child(4) .detail-value').innerText = data.pv_temperature_c + '°C';
+}
+// Load Section
+function updateLoadSection(data) {
+    document.querySelector('#load .metric-card .metric-value').innerText = data.current_load_kw + 'kW';
+    document.querySelector('#load .metric-card .detail-item:nth-child(1) .detail-value').innerText = data.load_current_a + 'A';
+    document.querySelector('#load .metric-card .detail-item:nth-child(2) .detail-value').innerText = data.grid_voltage_v + 'V';
+    document.querySelector('#load .metric-card .detail-item:nth-child(3) .detail-value').innerText = data.generator_runtime_h + 'h';
+    document.querySelector('#load .metric-card .detail-item:nth-child(4) .detail-value').innerText = data.generator_status;
+}
+// Environment Section
+function updateEnvironmentSection(data) {
+    document.querySelector('#environment .metric-card .metric-value').innerText = data.ambient_temperature_c + '°C';
+    document.querySelector('#environment .metric-card .detail-item:nth-child(1) .detail-value').innerText = data.humidity_percent + '%';
+    document.querySelector('#environment .metric-card .detail-item:nth-child(2) .detail-value').innerText = data.tamper_status;
+    document.querySelector('#environment .metric-card .detail-item:nth-child(3) .detail-value').innerText = data.smoke_status;
+    document.querySelector('#environment .metric-card .detail-item:nth-child(4) .detail-value').innerText = data.fire_alert_status;
+}
+
 // Make all update functions globally available
 window.updateSolarPower = updateSolarPower;
 window.updateSolarRadiation = updateSolarRadiation;
@@ -121,3 +159,8 @@ window.updateHumidity = updateHumidity;
 window.updateTamperStatus = updateTamperStatus;
 window.updateSmokeStatus = updateSmokeStatus;
 window.updateFireAlertStatus = updateFireAlertStatus;
+
+window.updateBatterySection = updateBatterySection;
+window.updateSolarSection = updateSolarSection;
+window.updateLoadSection = updateLoadSection;
+window.updateEnvironmentSection = updateEnvironmentSection;

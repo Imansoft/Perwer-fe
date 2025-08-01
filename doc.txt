@@ -1,0 +1,72 @@
+PERWER Energy Monitoring & AI System
+
+1. AI/ML Model Used and Why
+- Model: Random Forest Regressor (scikit-learn)
+- Purpose: Predicts battery State of Charge (SOC) from voltage, temperature, and current.
+- Why: Random Forest is robust to noise, handles non-linear relationships, and is fast for real-time inference. The model is trained on real battery data (see arrange/Datasets/battery_dataset.csv).
+- SOH: State of Health (SOH) is currently rule-based as a placeholder, using internal resistance.
+
+2. Communication Protocol
+- Hardware to Backend: HTTP POST with JSON payload to /api/data (see api-doc.md for schema).
+- Backend to Supabase: Python integration using supabase-py client. Data is logged in logs (history) and upserted in current (latest only).
+- Frontend: Connects directly to Supabase using supabase-js (via CDN) to fetch and display the latest data. data.js polls the 'current' table and calls dynamic.js functions to update the dashboard in real time.
+- API Documentation: Available as both markdown (api-doc.md) and styled HTML (api-doc.html) for easy sharing.
+
+3. AI System Architecture
+- Prediction Workflow:
+  1. Hardware sends raw sensor data (including battery voltage, temperature, current) to Flask backend.
+  2. Backend validates and parses data using Pydantic models (models.py).
+  3. Backend calls prediction.py to compute SOC (AI model) and SOH (rule-based) from battery data.
+  4. Enriched data (with predicted SOC/SOH) is stored in Supabase (logs and current tables).
+  5. Frontend (index.html) polls Supabase 'current' table using data.js and updates the dashboard using dynamic.js.
+- Files:
+  - app.py: Main API logic and Supabase integration
+  - prediction.py: Loads AI model and provides prediction functions
+  - models.py: Data validation
+  - dynamic.js: Handles all DOM updates for dashboard metrics
+  - data.js: Fetches latest data from Supabase and triggers dynamic.js updates
+  - api-doc.md / api-doc.html: API documentation
+
+4. Security and Data Privacy Measures
+- Supabase Service Key is stored in .env and never exposed to frontend; only the public anon key is used in the browser.
+- .env is included in .gitignore to prevent accidental commits of secrets.
+- Row-Level Security (RLS) is recommended for Supabase tables to restrict access.
+- No direct hardware-to-frontend communication; all data is validated and processed by the backend.
+- Input validation via Pydantic prevents malformed or malicious data.
+
+5. Metrics, Accuracy, Precision, Response Time
+- SOC Model:
+  - Trained/tested on 600 samples (see SOC_doc.txt)
+  - Metrics: (see SOC_doc.txt for details)
+  - Inference time: Instantaneous (sub-second)
+- API Response:
+  - Typical POST /api/data response: < 200ms (local)
+- Frontend:
+  - Dashboard updates every 30 seconds via Supabase polling; UI updates are instant on data change.
+
+6. Key Challenges and Solutions
+- Model Integration: Ensured correct mapping of JSON keys to model features.
+- Supabase Upsert: Used id=1 to always keep only the latest row in current.
+- Error Handling: Robust try/except in API, clear error messages.
+- Deployment: Managed environment variables and dependencies for Render.com.
+- Frontend Dynamic Updates: Carefully mapped all dashboard metrics to Supabase JSON fields and ensured selectors in dynamic.js matched the HTML structure for seamless updates.
+- Security: Ensured .env is not tracked by git and only public keys are exposed to the frontend.
+
+7. Highlight of Creativity
+- Seamless AI integration: SOC is always predicted live from raw sensor data.
+- Flexible schema: Handles missing/faulty sensor readings (e.g., '---' to None).
+- Modular design: Easy to swap in new models or rules for SOH.
+- Full-stack live dashboard: Real-time updates from hardware to backend to Supabase to frontend, with a clean, modern UI and dynamic updates using data.js and dynamic.js.
+- API documentation is available in both markdown and styled HTML for developer and stakeholder convenience.
+
+8. Screenshots & Dashboard
+- [Add screenshots of code, API, and dashboard here as images]
+
+9. Short Video
+- [Add a short demo video link or file here]
+
+---
+
+For API details and JSON schema, see api-doc.md or api-doc.html.
+For model details, see arrange/docs/SOC_doc.txt.
+For dataset, see arrange/Datasets/battery_dataset.csv.

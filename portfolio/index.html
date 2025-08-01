@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Video Download</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #b3c6f7 0%, #e3ecfc 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 80px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(42,82,152,0.08);
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+        h1 {
+            color: #2a5298;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.9em 2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5em 0.5em 0 0.5em;
+            box-shadow: 0 4px 16px rgba(42,82,152,0.08);
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, #2a5298, #1e3c72);
+            transform: translateY(-2px);
+        }
+        .secondary-btn {
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            color: #1a237e;
+        }
+        .secondary-btn:hover {
+            background: linear-gradient(90deg, #2a5298, #ffd700);
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.2rem 0.5rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 0.7em 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Portfolio Project Video</h1>
+        <p>Click the button below to download or view my portfolio video on Google Drive.<br><br>For more projects, visit my portfolio page.</p>
+        <button class="btn" onclick="window.location.href='https://drive.google.com/your-video-link-here'">Download/View Video</button>
+        <button class="btn secondary-btn" onclick="window.location.href='http://perwer-fe.vercel.app/portfolio'">Go to Portfolio</button>
+    </div>
+</body>
+</html>
