@@ -21,11 +21,11 @@ const payload = {
 function updateDashboard(data) {
   // Generator
   document.getElementById('generator-status').textContent = data.generator_status;
-  document.getElementById('generator-uptime').textContent = data.generator_status === 'ON' ? data.generator_uptime_h : ' ';
+  document.getElementById('generator-uptime').textContent = data.generator_status === 'ON' ? data.generator_uptime_h : '--- ';
   document.getElementById('generator-status-indicator').style.background = data.generator_status === 'ON' ? '#22c55e' : '#ef4444';
   // Grid
   document.getElementById('grid-status').textContent = data.grid_status;
-  document.getElementById('grid-uptime').textContent = data.grid_status === 'ON' ? data.grid_uptime_h : ' ';
+  document.getElementById('grid-uptime').textContent = data.grid_status === 'ON' ? data.grid_uptime_h : '--- ';
   document.getElementById('grid-status-indicator').style.background = data.grid_status === 'ON' ? '#22c55e' : '#ef4444';
   // Solar PV
   document.getElementById('pv-current').textContent = data.pv_current_a;
