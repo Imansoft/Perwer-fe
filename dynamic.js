@@ -28,7 +28,10 @@ function updateDashboard(data) {
   document.getElementById('grid-uptime').textContent = data.grid_status === 'ON' ? data.grid_uptime_h : '--- ';
   document.getElementById('grid-status-indicator').style.background = data.grid_status === 'ON' ? '#22c55e' : '#ef4444';
   // Solar PV
-  document.getElementById('pv-current').textContent = data.pv_current_a;
+  document.getElementById('pv-current').textContent =
+    data.pv_current_a !== '' && !isNaN(data.pv_current_a)
+      ? Number(data.pv_current_a).toFixed(2)
+      : data.pv_current_a;
   document.getElementById('pv-voltage').textContent = data.pv_voltage_v;
   document.getElementById('pv-power').textContent = data.pv_power_w;
   // Battery
@@ -37,7 +40,10 @@ function updateDashboard(data) {
   document.getElementById('battery-soc').textContent = data.SOC;
   document.getElementById('battery-soh').textContent = data.SOH;
   // Load
-  document.getElementById('load-current').textContent = data.load_current_a;
+  document.getElementById('load-current').textContent =
+    data.load_current_a !== '' && !isNaN(data.load_current_a)
+      ? Number(data.load_current_a).toFixed(2)
+      : data.load_current_a;
   document.getElementById('load-voltage').textContent = data.load_voltage_v;
   document.getElementById('load-power').textContent = data.load_power_w;
   // Environment
