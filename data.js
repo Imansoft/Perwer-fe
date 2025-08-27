@@ -1,4 +1,6 @@
-// Supabase client for browser (CDN)
+
+import { processPayload } from './logs.js';
+
 const SUPABASE_URL = 'https://azejxtkohlvcufcloovc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6ZWp4dGtvaGx2Y3VmY2xvb3ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NjA2NTMsImV4cCI6MjA2OTEzNjY1M30.6Ex47MtN4ssNiOvd1XOSWZ1ttC-RJ2Pjb6KyMmvVzrU';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -33,12 +35,18 @@ async function fetchAndUpdateDashboard() {
             load_voltage_v: current.load_voltage_v,
             load_power_w: current.load_power_w,
             temperature_c: current.temperature_c,
-            SOH: current.SOH, // <-- FIXED
-            SOC: current.SOC  // <-- FIXED
+            SOH: current.SOH,
+            SOC: current.SOC
         });
     }
-}
 
+    // Update Logs Window
+    const logsArray = processPayload(current);
+    const logsWindow = document.getElementById('logs-window');
+    if (logsWindow) {
+        logsWindow.textContent = logsArray.join('\n');
+    }
+}
 
 // Initial fetch
 fetchAndUpdateDashboard();
@@ -47,7 +55,6 @@ fetchAndUpdateDashboard();
 supabaseClient
     .channel('current-table-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'current' }, payload => {
-        // Fetch latest data and update dashboard
         fetchAndUpdateDashboard();
     })
     .subscribe();

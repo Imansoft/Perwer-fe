@@ -36,15 +36,10 @@
     <!-- Logs Window -->
     <div class="flex-1 bg-gray-900 rounded-xl shadow-lg p-4 overflow-y-auto h-56 min-h-[14rem]">
       <h2 class="text-perwer font-semibold text-lg mb-2 flex items-center"><span class="mr-2">📝</span>Logs Window</h2>
-      <pre class="text-sm text-gray-100 font-mono leading-relaxed">
-[02:41] Grid connected
-[02:42] Generator OFF
-[02:45] Battery SOC: 72%
-[02:46] Load demand: 2.4 W
-      </pre>
+      <pre id="logs-window" class="text-sm text-gray-100 font-mono leading-relaxed"></pre>
     </div>
     <!-- AI Predictions Panel -->
-    <div class="flex-1 bg-white rounded-xl shadow-lg p-4 min-h-[14rem]">
+    <div class="flex-1 bg-gray-900 rounded-xl shadow-lg p-4 min-h-[14rem]">
       <h2 class="text-perwer-dark font-semibold text-lg mb-2 flex items-center"><span class="mr-2">🤖</span>AI Predictions</h2>
       <ul class="space-y-3">
         <li class="bg-perwer-light rounded-lg px-3 py-2 text-gray-800 flex items-center"><span class="mr-2">🔋</span>Predicted Battery Depletion Time: <span class="font-bold ml-1">3.5h</span></li>
@@ -123,7 +118,7 @@
   </section>
 
   <!-- JS for mock state and dynamic updates -->
-  <script src="dynamic.js"></script>
-  <script src="data.js"></script>
+  <script type="module" src="dynamic.js"></script>
+  <script type="module" src="data.js"></script>
 </body>
 </html>
