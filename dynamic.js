@@ -1,20 +1,20 @@
 // Mock payload state
 const payload = {
-  generator_status: "OFF",
-  generator_uptime_h: 12.4,
-  grid_status: "ON",
-  grid_uptime_h: 24.5,
-  pv_current_a: 35.2,
-  pv_voltage_v: 24.8,
-  pv_power_w: 890,
-  battery_current_a: 45.2,
-  battery_voltage_v: 25.6,
-  load_current_a: 12.4,
-  load_voltage_v: 230,
-  load_power_w: 2.4,
-  temperature_c: 28,
-  SOH: 95,
-  SOC: 72
+  generator_status: "",
+  generator_uptime_h: "",
+  grid_status: "",
+  grid_uptime_h: '',
+  pv_current_a: '',
+  pv_voltage_v: '',
+  pv_power_w: '',
+  battery_current_a: '',
+  battery_voltage_v: '',
+  load_current_a: '',
+  load_voltage_v: '',
+  load_power_w: '',
+  temperature_c: '',
+  SOH: '',
+  SOC: ''
 };
 
 // Update UI with payload
