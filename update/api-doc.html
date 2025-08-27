@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PERWER Dashboard API Documentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-perwer-light min-h-screen font-sans">
+  <div class="max-w-3xl mx-auto my-10 bg-white rounded-xl shadow-lg p-8">
+    <h1 class="text-3xl font-bold text-perwer-dark mb-2">PERWER Dashboard API Documentation</h1>
+    <p class="text-lg text-gray-700 mb-6">Energy Monitoring & AI System – Update Module</p>
+    <h2 class="text-xl font-semibold text-perwer mb-2">Project Overview</h2>
+    <ul class="list-disc ml-6 mb-6 text-gray-700">
+      <li>Single-page dashboard built with HTML, TailwindCSS, and JavaScript.</li>
+      <li>Displays logs, AI predictions, and live sensor data in a modern, responsive layout.</li>
+      <li>Easy to connect to live data by updating the <code>payload</code> object in <code>dynamic.js</code>.</li>
+    </ul>
+    <h2 class="text-xl font-semibold text-perwer mb-2">Data Payload Structure</h2>
+    <pre class="bg-gray-100 rounded-lg p-4 text-sm overflow-x-auto mb-4">{
+  "generator_status": "OFF",
+  "generator_uptime_h": 12.4,
+  "grid_status": "ON",
+  "grid_uptime_h": 24.5,
+  "pv_current_a": 35.2,
+  "pv_voltage_v": 24.8,
+  "pv_power_w": 890,
+  "battery_current_a": 45.2,
+  "battery_voltage_v": 25.6,
+  "load_current_a": 12.4,
+  "load_voltage_v": 230,
+  "load_power_w": 2.4,
+  "temperature_c": 28,
+  "SOH": 95,
+  "SOC": 72
+}</pre>
+    <h2 class="text-xl font-semibold text-perwer mb-2">Dashboard Layout & Features</h2>
+    <ul class="list-disc ml-6 mb-6 text-gray-700">
+      <li>Header bar with project title and subtitle.</li>
+      <li>Logs Window (styled like a terminal) and AI Predictions panel side by side.</li>
+      <li>Responsive grid of data cards for Generator, Grid, Solar PV, Battery, Load, and Environment.</li>
+      <li>Consistent card design: icon, title, values, and status indicators.</li>
+      <li>Mobile-friendly: cards stack vertically on small screens.</li>
+    </ul>
+    <h2 class="text-xl font-semibold text-perwer mb-2">Code Organization</h2>
+    <ul class="list-disc ml-6 mb-6 text-gray-700">
+      <li><code>index.html</code>: Main dashboard layout and structure.</li>
+      <li><code>dynamic.js</code>: Contains the <code>payload</code> mock data and <code>updateDashboard</code> function for UI updates.</li>
+      <li>To connect live data, replace the <code>payload</code> object with your API or database source and call <code>updateDashboard</code> as needed.</li>
+    </ul>
+    <h2 class="text-xl font-semibold text-perwer mb-2">Example: Updating Dashboard with Live Data</h2>
+    <pre class="bg-gray-100 rounded-lg p-4 text-sm overflow-x-auto mb-4">// In dynamic.js
+fetch('/api/latest-data')
+  .then(res => res.json())
+  .then(data => updateDashboard(data));
+</pre>
+    <h2 class="text-xl font-semibold text-perwer mb-2">Instructions</h2>
+    <ul class="list-disc ml-6 mb-6 text-gray-700">
+      <li>Edit <code>dynamic.js</code> to connect to your backend or Supabase.</li>
+      <li>Ensure all card IDs in <code>index.html</code> match the keys in your data source.</li>
+      <li>Customize logs and AI predictions as needed for your use case.</li>
+    </ul>
+    <h2 class="text-xl font-semibold text-perwer mb-2">References</h2>
+    <ul class="list-disc ml-6 mb-2 text-gray-700">
+      <li>See <code>index.html</code> and <code>dynamic.js</code> in the update folder for full code.</li>
+    </ul>
+  </div>
+</body>
+</html>
