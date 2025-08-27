@@ -20,13 +20,35 @@ const payload = {
 // Update UI with payload
 function updateDashboard(data) {
   // Generator
+  const genStatusRow = document.getElementById('generator-status-row');
+  const genUptimeRow = document.getElementById('generator-uptime-row');
   document.getElementById('generator-status').textContent = data.generator_status;
-  document.getElementById('generator-uptime').textContent = data.generator_status === 'ON' ? data.generator_uptime_h : '--- ';
   document.getElementById('generator-status-indicator').style.background = data.generator_status === 'ON' ? '#22c55e' : '#ef4444';
+  if (data.generator_status === 'ON') {
+    genUptimeRow.style.display = '';
+    genStatusRow.style.marginTop = '0px';
+    document.getElementById('generator-uptime').textContent = data.generator_uptime_h;
+  } else {
+    genUptimeRow.style.display = 'none';
+    genStatusRow.style.marginTop = '24px';
+    document.getElementById('generator-uptime').textContent = '';
+  }
+
   // Grid
+  const gridStatusRow = document.getElementById('grid-status-row');
+  const gridUptimeRow = document.getElementById('grid-uptime-row');
   document.getElementById('grid-status').textContent = data.grid_status;
-  document.getElementById('grid-uptime').textContent = data.grid_status === 'ON' ? data.grid_uptime_h : '--- ';
   document.getElementById('grid-status-indicator').style.background = data.grid_status === 'ON' ? '#22c55e' : '#ef4444';
+  if (data.grid_status === 'ON') {
+    gridUptimeRow.style.display = '';
+    gridStatusRow.style.marginTop = '0px';
+    document.getElementById('grid-uptime').textContent = data.grid_uptime_h;
+  } else {
+    gridUptimeRow.style.display = 'none';
+    gridStatusRow.style.marginTop = '24px';
+    document.getElementById('grid-uptime').textContent = '';
+  }
+
   // Solar PV
   document.getElementById('pv-current').textContent =
     data.pv_current_a !== '' && !isNaN(data.pv_current_a)

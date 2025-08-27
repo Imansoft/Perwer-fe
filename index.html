@@ -57,11 +57,11 @@
         <span class="bg-perwer-dark rounded-full p-2 mr-2">🔌</span>
         <span class="text-lg font-semibold text-gray-800">Generator</span>
       </div>
-      <div class="flex items-center mb-2">
+      <div id="generator-status-row" class="flex items-center mb-2 transition-all duration-300">
         <span id="generator-status-indicator" class="w-3 h-3 rounded-full mr-2" style="background:#22c55e"></span>
         <span id="generator-status" class="font-mono text-sm">OFF</span>
       </div>
-      <div class="text-gray-700 text-sm">Uptime: <span id="generator-uptime" class="font-bold">12.4</span> h</div>
+      <div id="generator-uptime-row" class="text-gray-700 text-sm transition-all duration-300">Uptime: <span id="generator-uptime" class="font-bold">12.4</span> h</div>
     </div>
     <!-- Grid Card -->
     <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
@@ -69,11 +69,11 @@
         <span class="bg-perwer-dark rounded-full p-2 mr-2">🔋</span>
         <span class="text-lg font-semibold text-gray-800">Grid</span>
       </div>
-      <div class="flex items-center mb-2">
+      <div id="grid-status-row" class="flex items-center mb-2 transition-all duration-300">
         <span id="grid-status-indicator" class="w-3 h-3 rounded-full mr-2" style="background:#22c55e"></span>
         <span id="grid-status" class="font-mono text-sm">ON</span>
       </div>
-      <div class="text-gray-700 text-sm">Uptime: <span id="grid-uptime" class="font-bold">24.5</span> h</div>
+      <div id="grid-uptime-row" class="text-gray-700 text-sm transition-all duration-300">Uptime: <span id="grid-uptime" class="font-bold">24.5</span> h</div>
     </div>
     <!-- Solar PV Card -->
     <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
