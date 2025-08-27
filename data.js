@@ -33,8 +33,8 @@ async function fetchAndUpdateDashboard() {
             load_voltage_v: current.load_voltage_v,
             load_power_w: current.load_power_w,
             temperature_c: current.temperature_c,
-            SOH: current.battery.soh_percent,
-            SOC: current.battery.soc_percent
+            SOH: current.SOH, // <-- FIXED
+            SOC: current.SOC  // <-- FIXED
         });
     }
 }
