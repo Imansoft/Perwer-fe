@@ -1,1056 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PERWER - Energy Management Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #b3c6f7 0%, #e3ecfc 100%);
-            color: #333;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            border-bottom: 2px solid #e0e0e0;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo h1 {
-            color: #2a5298;
-            font-weight: 700;
-            font-size: 1.8rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .summary-bar {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .summary-item {
-            text-align: center;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .summary-value {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2a5298;
-        }
-
-        .summary-label {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 2rem;
-            min-height: calc(100vh - 120px);
-            align-items: start;
-        }
-
-        .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 140px;
-            height: fit-content;
-            max-height: calc(100vh - 160px);
-            overflow-y: auto;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            text-decoration: none;
-            color: #666;
-            border-radius: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
-            color: white;
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3);
-        }
-
-        .nav-link.active {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
-            color: white;
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3);
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            text-align: center;
-            font-size: 1rem;
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            min-height: 0;
-        }
-
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .side-panels {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .metric-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            height: fit-content;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-
-        .solar-icon { background: linear-gradient(45deg, #ffd700, #ff8c00); }
-        .battery-icon { background: linear-gradient(45deg, #4ade80, #22c55e); }
-        .temp-icon { background: linear-gradient(45deg, #f97316, #ea580c); }
-        .gen-icon { background: linear-gradient(45deg, #ef4444, #dc2626); }
-        .env-icon { background: linear-gradient(45deg, #06b6d4, #0891b2); }
-        .ai-icon { background: linear-gradient(45deg, #8b5cf6, #7c3aed); }
-
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .status-ok { background: #22c55e; }
-        .status-warning { background: #f59e0b; }
-        .status-critical { background: #ef4444; }
-        .status-offline { background: #6b7280; }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2a5298;
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-label {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .metric-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .detail-item {
-            text-align: center;
-            padding: 0.75rem 0.5rem;
-            background: rgba(42, 82, 152, 0.1);
-            border-radius: 8px;
-        }
-
-        .detail-value {
-            font-weight: 600;
-            color: #2a5298;
-            font-size: 0.95rem;
-        }
-
-        .detail-label {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        .sidebar-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            height: fit-content;
-        }
-
-        .panel-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #1a237e;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chart-placeholder {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, rgba(42, 82, 152, 0.1), rgba(30, 60, 114, 0.1));
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-style: italic;
-            margin-bottom: 1rem;
-            border: 2px dashed #ddd;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .chart-placeholder:hover {
-            border-color: #2a5298;
-            background: linear-gradient(135deg, rgba(42, 82, 152, 0.15), rgba(30, 60, 114, 0.15));
-        }
-
-        .alerts-list, .predictions-list {
-            list-style: none;
-        }
-
-        .alert-item, .prediction-item {
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            border-left: 4px solid;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .alert-item:hover, .prediction-item:hover {
-            transform: translateX(4px);
-        }
-
-        .alert-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: #f59e0b;
-            color: #92400e;
-        }
-
-        .alert-critical {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: #ef4444;
-            color: #991b1b;
-        }
-
-        .alert-info {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: #3b82f6;
-            color: #1e40af;
-        }
-
-        .prediction-item {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: #22c55e;
-            color: #166534;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e, #4ade80);
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .battery-progress .progress-fill {
-            background: linear-gradient(90deg, #4ade80, #22c55e);
-        }
-
-        .solar-progress .progress-fill {
-            background: linear-gradient(90deg, #ffd700, #ff8c00);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #1a237e;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #2a5298;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 250px 1fr;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-            }
-            
-            .sidebar {
-                position: static;
-                max-height: none;
-                order: 2;
-            }
-            
-            .main-content {
-                order: 1;
-            }
-            
-            .summary-bar {
-                flex-wrap: wrap;
-                gap: 1rem;
-                justify-content: center;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .mobile-menu-toggle {
-                display: block;
-            }
-            
-            .sidebar {
-                display: none;
-            }
-            
-            .sidebar.mobile-open {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 1000;
-                background: rgba(255, 255, 255, 0.98);
-                backdrop-filter: blur(20px);
-                max-width: none;
-                height: 100vh;
-                border-radius: 0;
-                padding: 2rem;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .side-panels {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0.5rem;
-            }
-            
-            .summary-bar {
-                grid-template-columns: repeat(2, 1fr);
-                display: grid;
-                gap: 0.5rem;
-            }
-            
-            .metric-card {
-                padding: 1rem;
-            }
-            
-            .metric-value {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PERWER Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            perwer: {
+              DEFAULT: '#FFD600', // main yellow
+              dark: '#FFC107',
+              light: '#FFF9C4',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">⚡</div>
-                <h1>PERWER</h1>
-                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
-            </div>
-            <div class="summary-bar">
-                <div class="summary-item">
-                    <div class="summary-value" id="header-soc">64%</div>
-                    <div class="summary-label">Battery SoC</div>
-                </div>
-                <div class="summary-item">
-                    <div class="summary-value">12.4h</div>
-                    <div class="summary-label">Gen Runtime</div>
-                </div>
-                <div class="summary-item">
-                    <div class="summary-value" id="header-solar">847W</div>
-                    <div class="summary-label">Solar Yield</div>
-                </div>
-                <div class="summary-item">
-                    <div class="summary-value">24°C</div>
-                    <div class="summary-label">Ambient Temp</div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
-            <nav>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active" data-section="overview">
-                            <span class="nav-icon">📊</span>
-                            Overview
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-section="battery">
-                            <span class="nav-icon">🔋</span>
-                            Battery
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-section="solar">
-                            <span class="nav-icon">☀️</span>
-                            Solar
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-section="load">
-                            <span class="nav-icon">⚡</span>
-                            Load
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-section="environment">
-                            <span class="nav-icon">🌡️</span>
-                            Environment
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-section="ai-insights">
-                            <span class="nav-icon">🤖</span>
-                            AI Insights
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <!-- Overview Section -->
-            <div class="content-section active" id="overview">
-                <div class="section-title">
-                    <span>📊</span>
-                    System Overview
-                </div>
-                <div class="metrics-grid">
-                    <!-- Solar Metrics -->
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon solar-icon">☀️</div>
-                                Solar Generation
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value" id="solar-power">847W</div>
-                        <div class="metric-label">Current Power Output</div>
-                        <div class="progress-bar solar-progress">
-                            <div class="progress-fill" style="width: 78%"></div>
-                        </div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">892 W/m²</div>
-                                <div class="detail-label">Solar Radiation</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">24.8V</div>
-                                <div class="detail-label">PV Voltage</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">34.2A</div>
-                                <div class="detail-label">PV Current</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">45°C</div>
-                                <div class="detail-label">PV Temperature</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Battery Metrics -->
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon battery-icon">🔋</div>
-                                Battery Status
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value" id="battery-soc">64%</div>
-                        <div class="metric-label">State of Charge (SoC)</div>
-                        <div class="progress-bar battery-progress">
-                            <div class="progress-fill" id="battery-progress" style="width: 64%"></div>
-                        </div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">87%</div>
-                                <div class="detail-label">SoH</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">36%</div>
-                                <div class="detail-label">DoD</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">25.6V</div>
-                                <div class="detail-label">Voltage</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">28°C</div>
-                                <div class="detail-label">Temperature</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Load Metrics -->
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon gen-icon">⚡</div>
-                                Load & Generator
-                            </div>
-                            <div class="status-indicator status-warning"></div>
-                        </div>
-                        <div class="metric-value">2.4kW</div>
-                        <div class="metric-label">Current Load</div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">12.4A</div>
-                                <div class="detail-label">Load Current</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">230V</div>
-                                <div class="detail-label">Grid Voltage</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">12.4h</div>
-                                <div class="detail-label">Gen Runtime</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">OFF</div>
-                                <div class="detail-label">Gen Status</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Environmental Metrics -->
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon env-icon">🌡️</div>
-                                Environment & Safety
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value">24°C</div>
-                        <div class="metric-label">Ambient Temperature</div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">68%</div>
-                                <div class="detail-label">Humidity</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">OK</div>
-                                <div class="detail-label">Tamper</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">CLEAR</div>
-                                <div class="detail-label">Smoke</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">SAFE</div>
-                                <div class="detail-label">Fire Alert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="side-panels">
-                    <!-- Real-time Charts -->
-                    <div class="sidebar-panel">
-                        <div class="panel-title">
-                            <span>📈</span>
-                            Real-time Monitoring
-                        </div>
-                        <div class="chart-placeholder">
-                            <strong>SoC Trend Chart</strong>
-                            <small>(Real-time data visualization)</small>
-                        </div>
-                        <div class="chart-placeholder">
-                            <strong>Solar Irradiance Curve</strong>
-                            <small>(24-hour solar pattern)</small>
-                        </div>
-                    </div>
-
-                    <!-- Alerts Panel -->
-                    <div class="sidebar-panel">
-                        <div class="panel-title">
-                            <span>⚠️</span>
-                            System Alerts
-                        </div>
-                        <ul class="alerts-list">
-                            <li class="alert-item alert-warning">
-                                Generator runtime approaching maintenance threshold
-                            </li>
-                            <li class="alert-item alert-info">
-                                Solar yield 15% above forecast
-                            </li>
-                            <li class="alert-item alert-critical">
-                                Battery temperature elevated - monitor closely
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- AI Insights Panel -->
-                    <div class="sidebar-panel">
-                        <div class="panel-title">
-                            <span>🤖</span>
-                            AI Predictions
-                        </div>
-                        <ul class="predictions-list">
-                            <li class="prediction-item">
-                                Battery SoH will drop to 78% in 14 days based on current usage patterns
-                            </li>
-                            <li class="prediction-item">
-                                Forecasted solar yield: 6.2kWh tomorrow (partly cloudy)
-                            </li>
-                            <li class="prediction-item">
-                                Estimated diesel savings: $47 this week with optimal scheduling
-                            </li>
-                            <li class="prediction-item">
-                                Recommend generator start at 22:30 tonight to prevent deep discharge
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Battery Section -->
-            <div class="content-section" id="battery">
-                <div class="section-title">
-                    <span>🔋</span>
-                    Battery Management
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon battery-icon">🔋</div>
-                                Battery Health
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value">87%</div>
-                        <div class="metric-label">State of Health (SoH)</div>
-                        <div class="progress-bar battery-progress">
-                            <div class="progress-fill" style="width: 87%"></div>
-                        </div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">1247</div>
-                                <div class="detail-label">Cycles</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">28°C</div>
-                                <div class="detail-label">Temp</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">25.6V</div>
-                                <div class="detail-label">Voltage</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">45.2A</div>
-                                <div class="detail-label">Current</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon battery-icon">🔋</div>
-                                Charging Profile
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value">BULK</div>
-                        <div class="metric-label">Current Charge Mode</div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">2.3h</div>
-                                <div class="detail-label">Time to Full</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">847W</div>
-                                <div class="detail-label">Charge Rate</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">29.2V</div>
-                                <div class="detail-label">Target V</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">AUTO</div>
-                                <div class="detail-label">Mode</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Solar Section -->
-            <div class="content-section" id="solar">
-                <div class="section-title">
-                    <span>☀️</span>
-                    Solar Power System
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon solar-icon">☀️</div>
-                                Solar Generation
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value">847W</div>
-                        <div class="metric-label">Current Power Output</div>
-                        <div class="progress-bar solar-progress">
-                            <div class="progress-fill" style="width: 78%"></div>
-                        </div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">892 W/m²</div>
-                                <div class="detail-label">Solar Radiation</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">24.8V</div>
-                                <div class="detail-label">PV Voltage</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">34.2A</div>
-                                <div class="detail-label">PV Current</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">45°C</div>
-                                <div class="detail-label">PV Temperature</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Load Section -->
-            <div class="content-section" id="load">
-                <div class="section-title">
-                    <span>⚡</span>
-                    Load & Generator
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon gen-icon">⚡</div>
-                                Load Metrics
-                            </div>
-                            <div class="status-indicator status-warning"></div>
-                        </div>
-                        <div class="metric-value">2.4kW</div>
-                        <div class="metric-label">Current Load</div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">12.4A</div>
-                                <div class="detail-label">Load Current</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">230V</div>
-                                <div class="detail-label">Grid Voltage</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">12.4h</div>
-                                <div class="detail-label">Gen Runtime</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">OFF</div>
-                                <div class="detail-label">Gen Status</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Environment Section -->
-            <div class="content-section" id="environment">
-                <div class="section-title">
-                    <span>🌡️</span>
-                    Environment & Safety
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon env-icon">🌡️</div>
-                                Environmental Metrics
-                            </div>
-                            <div class="status-indicator status-ok"></div>
-                        </div>
-                        <div class="metric-value">24°C</div>
-                        <div class="metric-label">Ambient Temperature</div>
-                        <div class="metric-details">
-                            <div class="detail-item">
-                                <div class="detail-value">68%</div>
-                                <div class="detail-label">Humidity</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">OK</div>
-                                <div class="detail-label">Tamper</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">CLEAR</div>
-                                <div class="detail-label">Smoke</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-value">SAFE</div>
-                                <div class="detail-label">Fire Alert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Insights Section -->
-            <div class="content-section" id="ai-insights">
-                <div class="section-title">
-                    <span>🤖</span>
-                    AI Insights
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <div class="card-icon ai-icon">🤖</div>
-                                AI Predictions
-                            </div>
-                        </div>
-                        <div class="metric-label">Latest AI-driven insights and forecasts</div>
-                        <ul class="predictions-list">
-                            <li class="prediction-item">
-                                Battery SoH will drop to 78% in 14 days based on current usage patterns
-                            </li>
-                            <li class="prediction-item">
-                                Forecasted solar yield: 6.2kWh tomorrow (partly cloudy)
-                            </li>
-                            <li class="prediction-item">
-                                Estimated diesel savings: $47 this week with optimal scheduling
-                            </li>
-                            <li class="prediction-item">
-                                Recommend generator start at 22:30 tonight to prevent deep discharge
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </main>
+<body class="bg-perwer-light min-h-screen font-sans">
+  <!-- Header -->
+  <header class="bg-perwer shadow-lg py-6 px-4">
+    <div class="max-w-5xl mx-auto flex flex-col items-center">
+      <h1 class="text-3xl font-bold text-gray-900 tracking-wide">PERWER Dashboard</h1>
+      <p class="text-lg text-gray-700 mt-2">Energy Monitoring & AI System</p>
     </div>
+  </header>
 
-    <script>
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('mobile-open');
-        }
+  <!-- Log & AI Section -->
+  <section class="max-w-5xl mx-auto mt-8 px-4 flex flex-col md:flex-row gap-6">
+    <!-- Logs Window -->
+    <div class="flex-1 bg-gray-900 rounded-xl shadow-lg p-4 overflow-y-auto h-56 min-h-[14rem]">
+      <h2 class="text-perwer font-semibold text-lg mb-2 flex items-center"><span class="mr-2">📝</span>Logs Window</h2>
+      <pre class="text-sm text-gray-100 font-mono leading-relaxed">
+[02:41] Grid connected
+[02:42] Generator OFF
+[02:45] Battery SOC: 72%
+[02:46] Load demand: 2.4 W
+      </pre>
+    </div>
+    <!-- AI Predictions Panel -->
+    <div class="flex-1 bg-white rounded-xl shadow-lg p-4 min-h-[14rem]">
+      <h2 class="text-perwer-dark font-semibold text-lg mb-2 flex items-center"><span class="mr-2">🤖</span>AI Predictions</h2>
+      <ul class="space-y-3">
+        <li class="bg-perwer-light rounded-lg px-3 py-2 text-gray-800 flex items-center"><span class="mr-2">🔋</span>Predicted Battery Depletion Time: <span class="font-bold ml-1">3.5h</span></li>
+        <li class="bg-perwer-light rounded-lg px-3 py-2 text-gray-800 flex items-center"><span class="mr-2">⚡</span>Grid Stability: <span class="font-bold ml-1">High</span></li>
+        <li class="bg-perwer-light rounded-lg px-3 py-2 text-gray-800 flex items-center"><span class="mr-2">🌞</span>Solar Expected Output Next Hour: <span class="font-bold ml-1">920 W</span></li>
+        <li class="bg-perwer-light rounded-lg px-3 py-2 text-gray-800 flex items-center"><span class="mr-2">📌</span>Recommended Action: <span class="font-bold ml-1">Switch to solar priority</span></li>
+      </ul>
+    </div>
+  </section>
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                const section = this.getAttribute('data-section');
+  <!-- Data Cards Grid -->
+  <section class="max-w-5xl mx-auto mt-8 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Generator Card -->
+    <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
+      <div class="flex items-center mb-2">
+        <span class="bg-perwer-dark rounded-full p-2 mr-2">🔌</span>
+        <span class="text-lg font-semibold text-gray-800">Generator</span>
+      </div>
+      <div class="flex items-center mb-2">
+        <span id="generator-status-indicator" class="w-3 h-3 rounded-full mr-2" style="background:#22c55e"></span>
+        <span id="generator-status" class="font-mono text-sm">OFF</span>
+      </div>
+      <div class="text-gray-700 text-sm">Uptime: <span id="generator-uptime" class="font-bold">12.4</span> h</div>
+    </div>
+    <!-- Grid Card -->
+    <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
+      <div class="flex items-center mb-2">
+        <span class="bg-perwer-dark rounded-full p-2 mr-2">🔋</span>
+        <span class="text-lg font-semibold text-gray-800">Grid</span>
+      </div>
+      <div class="flex items-center mb-2">
+        <span id="grid-status-indicator" class="w-3 h-3 rounded-full mr-2" style="background:#22c55e"></span>
+        <span id="grid-status" class="font-mono text-sm">ON</span>
+      </div>
+      <div class="text-gray-700 text-sm">Uptime: <span id="grid-uptime" class="font-bold">24.5</span> h</div>
+    </div>
+    <!-- Solar PV Card -->
+    <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
+      <div class="flex items-center mb-2">
+        <span class="bg-perwer-dark rounded-full p-2 mr-2">🌞</span>
+        <span class="text-lg font-semibold text-gray-800">Solar PV</span>
+      </div>
+      <div class="text-gray-700 text-sm">Current: <span id="pv-current" class="font-bold">35.2</span> A</div>
+      <div class="text-gray-700 text-sm">Voltage: <span id="pv-voltage" class="font-bold">24.8</span> V</div>
+      <div class="text-gray-700 text-sm">Power: <span id="pv-power" class="font-bold">890</span> W</div>
+    </div>
+    <!-- Battery Card -->
+    <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
+      <div class="flex items-center mb-2">
+        <span class="bg-perwer-dark rounded-full p-2 mr-2">🔋</span>
+        <span class="text-lg font-semibold text-gray-800">Battery</span>
+      </div>
+      <div class="text-gray-700 text-sm">Current: <span id="battery-current" class="font-bold">45.2</span> A</div>
+      <div class="text-gray-700 text-sm">Voltage: <span id="battery-voltage" class="font-bold">25.6</span> V</div>
+      <div class="text-gray-700 text-sm">SOC: <span id="battery-soc" class="font-bold">72</span> %</div>
+      <div class="text-gray-700 text-sm">SOH: <span id="battery-soh" class="font-bold">95</span> %</div>
+    </div>
+    <!-- Load Card -->
+    <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
+      <div class="flex items-center mb-2">
+        <span class="bg-perwer-dark rounded-full p-2 mr-2">⚡</span>
+        <span class="text-lg font-semibold text-gray-800">Load</span>
+      </div>
+      <div class="text-gray-700 text-sm">Current: <span id="load-current" class="font-bold">12.4</span> A</div>
+      <div class="text-gray-700 text-sm">Voltage: <span id="load-voltage" class="font-bold">230</span> V</div>
+      <div class="text-gray-700 text-sm">Power: <span id="load-power" class="font-bold">2.4</span> W</div>
+    </div>
+    <!-- Environment Card -->
+    <div class="bg-white rounded-xl shadow-lg p-5 flex flex-col items-start">
+      <div class="flex items-center mb-2">
+        <span class="bg-perwer-dark rounded-full p-2 mr-2">🌡️</span>
+        <span class="text-lg font-semibold text-gray-800">Environment</span>
+      </div>
+      <div class="text-gray-700 text-sm">Temperature: <span id="env-temp" class="font-bold">28</span> °C</div>
+    </div>
+  </section>
 
-                // Remove active class from all links
-                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-
-                // Add active class to the clicked link
-                this.classList.add('active');
-
-                // Hide all content sections
-                document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-
-                // Show the clicked section
-                document.getElementById(section).classList.add('active');
-
-                // Hide sidebar on mobile after menu click
-                const sidebar = document.getElementById('sidebar');
-                if (window.innerWidth <= 768 && sidebar.classList.contains('mobile-open')) {
-                    sidebar.classList.remove('mobile-open');
-                }
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="dynamic.js"></script>
-    <script src="data.js"></script>
+  <!-- JS for mock state and dynamic updates -->
+  <script src="dynamic.js"></script>
+  <script src="data.js"></script>
 </body>
 </html>

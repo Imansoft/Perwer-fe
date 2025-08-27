@@ -17,48 +17,37 @@ async function fetchAndUpdateDashboard() {
 
     const current = data[0].data;
 
-    // Solar
-    window.updateSolarPower(current.solar.power_output_watts);
-    window.updateSolarRadiation(current.solar.radiation_w_per_m2);
-    window.updatePVVoltage(current.solar.pv_voltage);
-    window.updatePVCurrent(current.solar.pv_current);
-    window.updatePVTemperature(current.solar.pv_temperature_c);
-
-    // Battery
-    window.updateBatterySoc(current.battery.soc_percent);
-    window.updateBatterySoH(current.battery.soh_percent || 87); // fallback if not present
-    window.updateBatteryDoD(current.battery.dod_percent);
-    window.updateBatteryVoltage(current.battery.voltage);
-    window.updateBatteryTemperature(current.battery.temperature_c);
-    window.updateBatteryCycles(current.battery.cycles);
-    window.updateBatteryCurrent(current.battery.current_a);
-    window.updateBatteryChargeMode(current.battery.charge_mode);
-    window.updateBatteryTimeToFull(current.battery.time_to_full_h);
-    window.updateBatteryChargeRate(current.battery.charge_rate_w);
-    window.updateBatteryTargetVoltage(current.battery.target_voltage);
-    window.updateBatteryChargeModeSetting(current.battery.charge_mode_setting);
-
-    // Load/Generator
-    window.updateLoadCurrentLoad(current.load_generator.current_load_kw);
-    window.updateLoadCurrentA(current.load_generator.load_current_a);
-    window.updateGridVoltage(current.load_generator.grid_voltage_v);
-    window.updateGeneratorRuntime(current.load_generator.generator_runtime_h);
-    window.updateGeneratorStatus(current.load_generator.generator_status);
-
-    // Environment
-    window.updateAmbientTemp(current.environment.ambient_temperature_c);
-    window.updateHumidity(current.environment.humidity_percent);
-    window.updateTamperStatus(current.environment.tamper_status);
-    window.updateSmokeStatus(current.environment.smoke_status);
-    window.updateFireAlertStatus(current.environment.fire_alert_status);
-
-    // In data.js, after fetching current data:
-    window.updateBatterySection(current.battery);
-    window.updateSolarSection(current.solar);
-    window.updateLoadSection(current.load_generator);
-    window.updateEnvironmentSection(current.environment);
+    // Call updateDashboard in dynamic.js
+    if (window.updateDashboard) {
+        window.updateDashboard({
+            generator_status: current.generator_status,
+            generator_uptime_h: current.generator_uptime_h,
+            grid_status: current.grid_status,
+            grid_uptime_h: current.grid_uptime_h,
+            pv_current_a: current.pv_current_a,
+            pv_voltage_v: current.pv_voltage_v,
+            pv_power_w: current.pv_power_w,
+            battery_current_a: current.battery_current_a,
+            battery_voltage_v: current.battery_voltage_v,
+            load_current_a: current.load_current_a,
+            load_voltage_v: current.load_voltage_v,
+            load_power_w: current.load_power_w,
+            temperature_c: current.temperature_c,
+            SOH: current.battery.soh_percent,
+            SOC: current.battery.soc_percent
+        });
+    }
 }
 
-// Call on page load and every 30 seconds
+
+// Initial fetch
 fetchAndUpdateDashboard();
-setInterval(fetchAndUpdateDashboard, 30000);
+
+// Listen for realtime changes in the 'current' table
+supabaseClient
+    .channel('current-table-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'current' }, payload => {
+        // Fetch latest data and update dashboard
+        fetchAndUpdateDashboard();
+    })
+    .subscribe();
