@@ -46,3 +46,6 @@ function updateDashboard(data) {
 
 // Initial render
 updateDashboard(payload);
+
+// Expose updateDashboard globally for data.js
+window.updateDashboard = updateDashboard;
