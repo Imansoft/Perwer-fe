@@ -1,0 +1,73 @@
+I am building a single-page dashboard UI for my PERWER project. 
+Use HTML + TailwindCSS + JS . Follow these exact design requirements:
+
+1. Layout:
+   - A top header bar with the title "PERWER Dashboard" and a subtitle "Energy Monitoring & AI System".
+   - Below the header, place a **Log Window** and an **AI Predictions Panel** side by side (responsive: stack vertically on small screens).
+   - Below that, display a responsive grid of **Data Cards** for raw sensor values.
+
+2. Log & AI Section:
+   - Left: "Logs Window"
+     - Styled like a terminal/console (dark background, monospaced font, scrollable).
+     - Example entries:
+       [02:41] Grid connected
+       [02:42] Generator OFF
+       [02:45] Battery SOC: 72%
+       [02:46] Load demand: 2.4 W
+   - Right: "AI Predictions"
+     - Card with insights in a clean list format.
+     - Example predictions:
+       🔋 Predicted Battery Depletion Time: 3.5h
+       ⚡ Grid Stability: High
+       🌞 Solar Expected Output Next Hour: 920 W
+       📌 Recommended Action: Switch to solar priority
+
+3. Data Cards (grid below logs & AI):
+   - Generator Card:
+     - Show generator_status (ON/OFF) with a green/red indicator.
+     - Show generator_uptime_h in hours.
+   - Grid Card:
+     - Show grid_status (ON/OFF) with indicator.
+     - Show grid_uptime_h in hours.
+   - Solar PV Card:
+     - pv_current_a (A), pv_voltage_v (V), pv_power_w (W).
+   - Battery Card:
+     - battery_current_a (A), battery_voltage_v (V).
+     - SOC (%) and SOH (%).
+   - Load Card:
+     - load_current_a (A), load_voltage_v (V), load_power_w (W).
+   - Environment Card:
+     - temperature_c (°C).
+
+4. Styling:
+   - Use Tailwind classes for spacing, rounded corners, soft shadows.
+   - Each card should be consistent: icon, title, values with units.
+   - Layout should look clean and modern, responsive for desktop and mobile.
+
+5. Data source:
+   - The payload object is shaped like this:
+     {
+       "generator_status": "OFF",
+       "generator_uptime_h": 12.4,
+       "grid_status": "ON",
+       "grid_uptime_h": 24.5,
+       "pv_current_a": 35.2,
+       "pv_voltage_v": 24.8,
+       "pv_power_w": 890,
+       "battery_current_a": 45.2,
+       "battery_voltage_v": 25.6,
+       "load_current_a": 12.4,
+       "load_voltage_v": 230,
+       "load_power_w": 2.4,
+       "temperature_c": 28,
+       "SOH": 95,
+       "SOC": 72
+     }
+
+6. Task:
+   - Generate the full HTML code with Tailwind that implements this design.
+   - Make the payload a mock state variable at the top so I can later connect it to live data.
+   - Use clean component structure (e.g., Card component reused for Generator, Grid, etc.).
+   - Ensure the Logs and AI panels are distinct visually.
+
+Please generate the complete working code for this single-page dashboard.
