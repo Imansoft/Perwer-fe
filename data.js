@@ -1,3 +1,38 @@
+// Inactivity timer logic
+let lastUpdateTime = Date.now();
+let inactivityTimer = null;
+
+function resetInactivityTimer() {
+    if (inactivityTimer) clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+        // Reset dashboard
+        if (window.updateDashboard) {
+            window.updateDashboard({
+                generator_status: "OFF",
+                generator_uptime_h: '---',
+                grid_status: "OFF",
+                grid_uptime_h: '---',
+                pv_current_a: '---',
+                pv_voltage_v: '---',
+                pv_power_w: '---',
+                battery_current_a: '---',
+                battery_voltage_v: '---',
+                load_current_a: '---',
+                load_voltage_v: '---',
+                load_power_w: '---',
+                temperature_c: '---',
+                SOH: '---',
+                SOC: '---'
+            });
+        }
+        // Clear logs
+        const logsWindow = document.getElementById('logs-window');
+        if (logsWindow) logsWindow.textContent = '';
+        // Clear AI predictions
+        const aiList = document.getElementById('ai-predictions-list');
+        if (aiList) aiList.innerHTML = '';
+    }, 5 * 60 * 1000); // 5 minutes
+}
 
 import { processPayload } from './logs.js';
 import { generatePredictions } from './ai.js';
@@ -60,10 +95,13 @@ async function fetchAndUpdateDashboard() {
             aiList.appendChild(li);
         });
     }
+    lastUpdateTime = Date.now();
+    resetInactivityTimer();
 }
 
 // Initial fetch
 fetchAndUpdateDashboard();
+resetInactivityTimer();
 
 // Listen for realtime changes in the 'current' table
 supabaseClient
