@@ -72,3 +72,6 @@ supabaseClient
         fetchAndUpdateDashboard();
     })
     .subscribe();
+
+// Fallback polling every 5 seconds to ensure UI stays updated
+setInterval(fetchAndUpdateDashboard, 1000);
