@@ -3,9 +3,679 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation</title>
+    <title>PERWER System Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF9C4 0%, #F2D01D 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 32px auto;
+            background: rgba(255,255,255,0.98);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(242,208,29,0.12);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #F2D01D 0%, #FFC107 100%);
+            color: #1a237e;
+            text-align: center;
+            padding: 2.5rem 2rem 1.5rem 2rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            background: #FFF9C4;
+            border-bottom: 2px solid #F2D01D;
+            padding: 0.7rem 0;
+        }
+
+        .nav a {
+            color: #1a237e;
+            text-decoration: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav a:hover {
+            background: #F2D01D;
+            color: #fff;
+        }
+
+        .content {
+            padding: 0;
+        }
+
+        .section {
+            padding: 2.5rem 2rem;
+            border-bottom: 1px solid #f3f3f3;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            color: #FFC107;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .section h3 {
+            color: #F2D01D;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .section h4 {
+            color: #1a237e;
+            font-size: 1.1rem;
+            margin: 1.2rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .section p, .section ul, .section ol {
+            font-size: 1rem;
+            color: #444;
+        }
+
+        .section ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-table, .endpoint-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(242,208,29,0.08);
+        }
+
+        .feature-table th, .endpoint-table th {
+            background: #F2D01D;
+            color: #1a237e;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .feature-table td, .endpoint-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f3f3;
+            vertical-align: top;
+        }
+
+        .feature-table tr:nth-child(even), .endpoint-table tr:nth-child(even) {
+            background: #FFF9C4;
+        }
+
+        .feature-table tr:hover, .endpoint-table tr:hover {
+            background: #FFE082;
+            transition: background-color 0.2s;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tech-card {
+            background: #FFF9C4;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(242,208,29,0.08);
+        }
+
+        .tech-card h4 {
+            color: #F2D01D;
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .file-structure {
+            background: #222;
+            color: #F2D01D;
+            padding: 1.2rem;
+            border-radius: 10px;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .architecture-diagram {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #FFF9C4;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 1rem;
+            line-height: 1.8;
+            border: 2px solid #F2D01D;
+        }
+
+        .code-block {
+            background: #222;
+            color: #FFF9C4;
+            padding: 1.2rem;
+            border-radius: 10px;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'JSON';
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            background: #F2D01D;
+            color: #222;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .section {
+                padding: 1.2rem 0.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.3rem;
+            }
+
+            .nav {
+                flex-direction: column;
+            }
+
+            .nav a {
+                text-align: center;
+            }
+
+            .tech-stack {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .feature-table, .endpoint-table {
+                font-size: 0.85rem;
+            }
+
+            .feature-table th, .feature-table td,
+            .endpoint-table th, .endpoint-table td {
+                padding: 0.7rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <p>Hello World!</p>
+    <div class="container">
+        <header class="header">
+            <h1>PERWER System</h1>
+            <p>Comprehensive Battery, Solar & Grid Monitoring Documentation</p>
+        </header>
+
+        <nav class="nav">
+            <a href="#overview">Overview</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#frontend">Frontend</a>
+            <a href="#backend">Backend</a>
+            <a href="#data">Data Handling</a>
+            <a href="#usage">Usage Guide</a>
+            <a href="#future">Future Plans</a>
+        </nav>
+
+        <main class="content">
+            <section id="overview" class="section">
+                <h2>Project Overview</h2>
+                
+                <h3>High-Level Summary</h3>
+                <p>The PERWER system is a comprehensive solution for monitoring, predicting, and managing battery, solar, and grid operations. It consists of a robust backend for data processing and AI predictions, and an intuitive frontend for visualization and user interaction. The product is designed to provide real-time insights, predictive analytics, and actionable logs for operational efficiency and maintenance planning.</p>
+
+                <h3>Purpose of the Software</h3>
+                <ul>
+                    <li>Enable real-time monitoring of battery, grid, solar, and generator status</li>
+                    <li>Provide AI-driven predictions for battery health and operational metrics</li>
+                    <li>Centralize logs and events for operational transparency and troubleshooting</li>
+                    <li>Empower users with a dashboard for actionable insights and historical data review</li>
+                </ul>
+
+                <h3>Key Features</h3>
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Frontend</th>
+                            <th>Backend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Dashboard</strong></td>
+                            <td>Real-time data visualization</td>
+                            <td>Data aggregation and API serving</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Log Window</strong></td>
+                            <td>Event logs display and filtering</td>
+                            <td>Log generation and processing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI Prediction Panel</strong></td>
+                            <td>Display of AI predictions</td>
+                            <td>AI model inference and prediction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Export</strong></td>
+                            <td>Export logs and predictions (future)</td>
+                            <td>Data formatting for export</td>
+                        </tr>
+                        <tr>
+                            <td><strong>User Interaction</strong></td>
+                            <td>Responsive UI, event triggers</td>
+                            <td>API endpoints for user actions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>State Management</strong></td>
+                            <td>Dynamic updates, event-driven UI</td>
+                            <td>Persistent data and model management</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Tech Stack</h3>
+                <div class="tech-stack">
+                    <div class="tech-card">
+                        <h4>Frontend</h4>
+                        <ul>
+                            <li>HTML, CSS, JavaScript (Vanilla)</li>
+                            <li>Custom JS modules (ai.js, data.js, logs.js, dynamic.js)</li>
+                            <li>No external frameworks</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card">
+                        <h4>Backend</h4>
+                        <ul>
+                            <li>Python 3.x</li>
+                            <li>Flask (API server)</li>
+                            <li>Custom modules (models.py, prediction.py)</li>
+                            <li>Machine Learning (scikit-learn, pandas)</li>
+                            <li>SQLite (table.db for frontend, CSV for backend datasets)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="architecture" class="section">
+                <h2>System Architecture</h2>
+                
+                <h3>High-Level Architecture</h3>
+                <p>The PERWER system follows a client-server architecture, where the frontend (client) communicates with the backend (server) via RESTful APIs. The backend is responsible for data aggregation, log/event processing, and AI predictions, while the frontend provides real-time visualization and user interaction.</p>
+
+                <div class="architecture-diagram">
+                    +-------------------+         REST API         +-------------------+<br>
+                    |   Frontend (JS)   | &lt;--------------------&gt; |   Backend (Flask) |<br>
+                    |  Dashboard, Logs  |                         |  Data, AI, Logs   |<br>
+                    +-------------------+                         +-------------------+
+                </div>
+
+                <ul>
+                    <li>Frontend requests data, logs, and predictions from backend APIs</li>
+                    <li>Backend processes requests, runs AI models, and returns JSON responses</li>
+                    <li>No direct database connection from frontend; all data flows through backend APIs</li>
+                </ul>
+
+                <h3>APIs and Data Flow</h3>
+                <ul>
+                    <li>Data flows from backend to frontend as JSON payloads (e.g., SOC, SOH, grid status)</li>
+                    <li>Frontend triggers API calls for dashboard updates, log retrieval, and AI predictions</li>
+                    <li>Backend endpoints handle requests, process data, and respond with structured results</li>
+                </ul>
+
+                <h3>Real-Time Communication</h3>
+                <ul>
+                    <li>The current system uses periodic polling from frontend to backend for real-time updates</li>
+                    <li>WebSockets are not implemented yet</li>
+                    <li>Future improvements may include WebSocket support for push-based real-time delivery</li>
+                </ul>
+            </section>
+
+            <section id="frontend" class="section">
+                <h2>Frontend Documentation</h2>
+                
+                <h3>Framework / Library Used</h3>
+                <ul>
+                    <li>HTML, CSS, JavaScript (Vanilla)</li>
+                    <li>No external frameworks (React, Angular, Vue not used)</li>
+                    <li>Custom JavaScript modules for logic and UI updates</li>
+                </ul>
+
+                <h3>File / Folder Structure</h3>
+                <div class="file-structure">
+Perwer-frontend/<br>
+├── ai.js            # Handles AI prediction panel logic and API calls<br>
+├── data.js          # Manages data fetching and transformation<br>
+├── logs.js          # Handles log window updates and event triggers<br>
+├── dynamic.js       # UI interactivity and dynamic DOM updates<br>
+├── index.html       # Main dashboard layout and structure<br>
+├── style.css        # Custom styles (if present)<br>
+├── table.db         # Local database for frontend (if used)<br>
+├── api-doc.md/html  # API documentation for frontend consumption<br>
+├── portfolio/       # Additional UI pages (e.g., portfolio)<br>
+├── update/          # Update prompts and documentation<br>
+└── .env/.gitignore  # Environment/config files
+                </div>
+
+                <h3>Main UI Components</h3>
+                <ul>
+                    <li><strong>Dashboard:</strong> Central panel displaying real-time metrics for battery, grid, and generator</li>
+                    <li><strong>Log Window:</strong> Event log display, filtering, and updates based on backend events</li>
+                    <li><strong>AI Prediction Panel:</strong> Displays AI-driven predictions for battery health and system metrics</li>
+                </ul>
+
+                <h3>State Management Approach</h3>
+                <ul>
+                    <li>State managed via JavaScript variables and objects (no Redux/MobX)</li>
+                    <li>UI updates triggered by API responses and user actions</li>
+                    <li>Data fetched using periodic polling and updated dynamically</li>
+                </ul>
+
+                <h3>Event Handling & Triggers</h3>
+                <ul>
+                    <li>Log Window updates on backend events (e.g., grid ON/OFF, generator ON/OFF)</li>
+                    <li>Dashboard refreshes on polling intervals or user actions</li>
+                    <li>AI Prediction Panel updates when predictions are retrieved</li>
+                    <li>All event handling managed through custom JavaScript functions and listeners</li>
+                </ul>
+            </section>
+
+            <section id="backend" class="section">
+                <h2>Backend Documentation</h2>
+                
+                <h3>Framework / Language Used</h3>
+                <ul>
+                    <li>Python 3.x</li>
+                    <li>Flask (REST API server)</li>
+                    <li>Machine Learning: scikit-learn, pandas (for advanced/future predictions)</li>
+                    <li>Supabase (PostgreSQL cloud database)</li>
+                </ul>
+
+                <h3>File / Folder Structure</h3>
+                <div class="file-structure">
+PERWER/<br>
+├── app.py            # Main Flask application, API routing<br>
+├── models.py         # Data models and schema definitions<br>
+├── prediction.py     # Rule-based SOC/SOH prediction logic<br>
+├── requirements.txt  # Python dependencies<br>
+├── README.md         # Project overview and setup<br>
+├── test_request.py   # API endpoint testing<br>
+├── arrange/          # Model training and prediction utilities<br>
+│   ├── app.py<br>
+│   ├── model_predictor.py<br>
+│   ├── soc_model.pkl # Trained ML model (future/optional)<br>
+│   ├── train_model.py<br>
+│   ├── Datasets/<br>
+│   │   └── battery_dataset.csv<br>
+│   └── docs/<br>
+│       └── SOC_doc.txt<br>
+└── __pycache__/      # Compiled Python cache files
+                </div>
+
+                <h3>Endpoints</h3>
+                <table class="endpoint-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Purpose</th>
+                            <th>Input</th>
+                            <th>Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/api/data</code></td>
+                            <td>Post data to backend, upload to Supabase</td>
+                            <td>JSON metrics</td>
+                            <td>Success/Error message</td>
+                        </tr>
+                        <tr>
+                            <td><code>/predict</code></td>
+                            <td>Get battery predictions (SOC/SOH)</td>
+                            <td>JSON metrics</td>
+                            <td>JSON predictions</td>
+                        </tr>
+                        <tr>
+                            <td><code>/train</code></td>
+                            <td>Train/update AI model (future)</td>
+                            <td>CSV/JSON</td>
+                            <td>Training result</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Database Models</h3>
+                <ul>
+                    <li>Supabase (PostgreSQL) is used for persistent storage of battery, grid, and event data</li>
+                    <li>Data is posted via <code>/api/data</code> endpoint and uploaded to Supabase</li>
+                    <li>No local relational DB used; Supabase manages all persistence</li>
+                </ul>
+
+                <h3>Services</h3>
+                <ul>
+                    <li><strong>Log Processor:</strong> Generates and manages event logs based on system triggers</li>
+                    <li><strong>Rule-Based Prediction Service:</strong> Calculates SOC and SOH in prediction.py</li>
+                    <li><strong>Supabase Integration:</strong> Handles data upload/retrieval from Supabase</li>
+                    <li><strong>Model Trainer:</strong> Scripts for training/updating battery prediction models (optional, future)</li>
+                </ul>
+            </section>
+
+            <section id="data" class="section">
+                <h2>Data Handling</h2>
+                
+                <h3>Example Payload Sent to Frontend</h3>
+                <div class="code-block">
+{
+  "SOC": 78.5,
+  "SOH": 95.2,
+  "pv_power_w": 3200,
+  "grid_status": "ON",
+  "generator_status": "OFF",
+  "battery_voltage": 52.3,
+  "timestamp": "2025-08-28T14:32:00Z"
+}
+                </div>
+
+                <h3>Field Descriptions</h3>
+                <ul>
+                    <li><strong>SOC:</strong> State of Charge (%), rule-based calculation</li>
+                    <li><strong>SOH:</strong> State of Health (%), rule-based calculation</li>
+                    <li><strong>pv_power_w:</strong> Solar panel power output (watts)</li>
+                    <li><strong>grid_status:</strong> Grid connection status (ON/OFF)</li>
+                    <li><strong>generator_status:</strong> Generator status (ON/OFF)</li>
+                    <li><strong>battery_voltage:</strong> Current battery voltage (V)</li>
+                    <li><strong>timestamp:</strong> ISO 8601 formatted record time</li>
+                </ul>
+
+                <h3>Log Generation</h3>
+                <p>Logs are created on key events:</p>
+                <ul>
+                    <li>Grid ON/OFF</li>
+                    <li>Generator ON/OFF</li>
+                    <li>Battery charge/discharge events</li>
+                    <li>Solar activity</li>
+                </ul>
+                
+                <p>Each log entry includes:</p>
+                <ul>
+                    <li>Event type (e.g., grid ON)</li>
+                    <li>Timestamp</li>
+                    <li>Relevant metrics (SOC, SOH, etc.)</li>
+                </ul>
+                
+                <p>Logs are stored in Supabase and retrievable via <code>/logs</code> endpoint (supports filtering by event type or time range).</p>
+
+                <h3>AI Predictions</h3>
+                <ul>
+                    <li>SOC and SOH are computed using rule-based thresholds in prediction.py</li>
+                    <li>Backend process:
+                        <ol>
+                            <li>Parse incoming metrics</li>
+                            <li>Apply rule-based logic</li>
+                            <li>Return SOC and SOH predictions as JSON</li>
+                        </ol>
+                    </li>
+                    <li>Predictions are displayed in the frontend's AI Panel and updated in real-time</li>
+                </ul>
+            </section>
+
+            <section id="usage" class="section">
+                <h2>Usage Guide</h2>
+                
+                <h3>User Interaction Walkthrough</h3>
+                
+                <h4>Login / Access Dashboard</h4>
+                <ul>
+                    <li>Users access via the frontend web dashboard</li>
+                    <li>No authentication required (unless implemented in future)</li>
+                </ul>
+
+                <h4>Dashboard Overview</h4>
+                <p>Displays real-time metrics for:</p>
+                <ul>
+                    <li>Battery</li>
+                    <li>Grid</li>
+                    <li>Solar</li>
+                    <li>Generator</li>
+                </ul>
+                <p>Key values (SOC, SOH, pv_power_w, grid_status, etc.) update dynamically.</p>
+
+                <h4>Viewing Logs</h4>
+                <ul>
+                    <li>The Log Window shows chronological system events</li>
+                    <li>Events include: grid ON/OFF, generator ON/OFF, charge/discharge</li>
+                    <li>Users can filter logs by type or time</li>
+                    <li>Logs refresh automatically as new data arrives</li>
+                </ul>
+
+                <h4>AI Prediction Panel</h4>
+                <ul>
+                    <li>Displays SOC and SOH predictions</li>
+                    <li>Updates in real-time as backend sends new data</li>
+                    <li>Predictions also refresh on manual triggers (user refresh)</li>
+                </ul>
+
+                <h4>Triggering Actions</h4>
+                <ul>
+                    <li>Users can manually refresh dashboard data</li>
+                    <li>All data and predictions fetched via backend APIs</li>
+                </ul>
+
+                <h3>What Users See</h3>
+                <ul>
+                    <li><strong>Dashboard:</strong> Live system status overview</li>
+                    <li><strong>Logs:</strong> Historical list of operational events with timestamps</li>
+                    <li><strong>AI Predictions:</strong> Up-to-date SOC and SOH with clear indicators</li>
+                </ul>
+
+                <h3>Example User Flow</h3>
+                <ol>
+                    <li>User opens dashboard and sees live metrics</li>
+                    <li>User checks logs to verify system operation</li>
+                    <li>User views AI predictions for battery health</li>
+                    <li>User interacts with the system via the frontend</li>
+                </ol>
+            </section>
+
+            <section id="future" class="section">
+                <h2>Future Improvements</h2>
+                
+                <h3>USER AUTHENTICATION & PERSONALIZATION</h3>
+                <ul>
+                    <li>Implement secure login using device ID or user credentials.</li>
+                    <li>Personalize dashboard and data views based on user/device profile.</li>
+                    <li>Enable role-based access for different user types (admin, technician, viewer).</li>
+                </ul>
+                
+                <h3>ADVANCED AI PREDICTIVE ANALYSIS</h3>
+                <ul>
+                    <li>Integrate machine learning models to forecast potential hazards (e.g., battery failure, grid instability).</li>
+                    <li>Predict optimal energy management actions for cost savings and safety.</li>
+                    <li>Enable anomaly detection for early warning and preventive maintenance.</li>
+                </ul>
+                
+                <h3>ENHANCED LOG SYSTEM</h3>
+                <ul>
+                    <li>Track and record detailed behavior and usage of PERWER hardware and third-party devices (e.g., cell towers, inverters).</li>
+                    <li>Support historical log filtering, advanced search, and export to CSV.</li>
+                    <li>Visualize log trends and patterns for operational insights.</li>
+                </ul>
+                
+                <h3>NOTIFICIATION & ALERT SYSTEM</h3>
+                <ul>
+                    <li>Real-time notifications for critical events, system warnings, and maintenance reminders.</li>
+                    <li>Customizable alert thresholds for different metrics (SOC, SOH, grid status, etc.).</li>
+                    <li>Multi-channel alerts (dashboard, email, SMS, push notifications).</li>
+                </ul>
+
+                <h3>PERFORMANCE & SCALABILITY CONSIDERATIONS</h3>
+                <ul>
+                    <li>Optimize backend for high-frequency data ingestion and real-time analytics.</li>
+                    <li>Scale Supabase/PostgreSQL for large datasets and concurrent users.</li>
+                    <li>Implement caching and efficient API pagination for faster dashboard updates.</li>
+                    <li>Plan for distributed deployment to support multiple sites/devices.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
 </body>
 </html>

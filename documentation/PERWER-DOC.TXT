@@ -1,0 +1,285 @@
+====================================================
+1. PROJECT OVERVIEW
+====================================================
+
+HIGH-LEVEL SUMMARY
+The PERWER system is a comprehensive solution for monitoring, predicting, and managing
+battery, solar, and grid operations. It consists of a robust backend for data processing
+and AI predictions, and an intuitive frontend for visualization and user interaction.
+The product is designed to provide real-time insights, predictive analytics, and actionable
+logs for operational efficiency and maintenance planning.
+
+PURPOSE OF THE SOFTWARE
+- Enable real-time monitoring of battery, grid, solar, and generator status.
+- Provide AI-driven predictions for battery health and operational metrics.
+- Centralize logs and events for operational transparency and troubleshooting.
+- Empower users with a dashboard for actionable insights and historical data review.
+
+KEY FEATURES
+--------------------------------------------------------------------
+| Feature              | Frontend                                | Backend                          |
+|-----------------------|-----------------------------------------|----------------------------------|
+| Dashboard             | Real-time data visualization           | Data aggregation and API serving |
+| Log Window            | Event logs display and filtering       | Log generation and processing    |
+| AI Prediction Panel   | Display of AI predictions              | AI model inference and prediction|
+| Data Export           | Export logs and predictions (future)   | Data formatting for export       |
+| User Interaction      | Responsive UI, event triggers          | API endpoints for user actions   |
+| State Management      | Dynamic updates, event-driven UI       | Persistent data and model mgmt   |
+
+TECH STACK USED
+Frontend
+- HTML, CSS, JavaScript (Vanilla)
+- Custom JS modules (ai.js, data.js, logs.js, dynamic.js)
+- No external frameworks
+
+Backend
+- Python 3.x
+- Flask (API server)
+- Custom modules (models.py, prediction.py)
+- Machine Learning (scikit-learn, pandas)
+- SQLite (table.db for frontend, CSV for backend datasets)
+
+
+====================================================
+2. SYSTEM ARCHITECTURE
+====================================================
+
+HIGH-LEVEL ARCHITECTURE
+The PERWER system follows a client-server architecture, where the frontend (client)
+communicates with the backend (server) via RESTful APIs. The backend is responsible
+for data aggregation, log/event processing, and AI predictions, while the frontend
+provides real-time visualization and user interaction.
+
+   +-------------------+         REST API         +-------------------+
+   |   Frontend (JS)   | <---------------------> |   Backend (Flask) |
+   |  Dashboard, Logs  |                         |  Data, AI, Logs   |
+   +-------------------+                         +-------------------+
+
+- Frontend requests data, logs, and predictions from backend APIs.
+- Backend processes requests, runs AI models, and returns JSON responses.
+- No direct database connection from frontend; all data flows through backend APIs.
+
+APIs AND DATA FLOW
+- Data flows from backend to frontend as JSON payloads (e.g., SOC, SOH, grid status).
+- Frontend triggers API calls for dashboard updates, log retrieval, and AI predictions.
+- Backend endpoints handle requests, process data, and respond with structured results.
+
+REAL-TIME COMMUNICATION
+- The current system uses periodic polling from frontend to backend for real-time updates.
+- WebSockets are not implemented yet.
+- Future improvements may include WebSocket support for push-based real-time delivery.
+
+
+====================================================
+3. FRONTEND DOCUMENTATION
+====================================================
+
+FRAMEWORK / LIBRARY USED
+- HTML, CSS, JavaScript (Vanilla)
+- No external frameworks (React, Angular, Vue not used)
+- Custom JavaScript modules for logic and UI updates
+
+FILE / FOLDER STRUCTURE
+Perwer-frontend/
+├── ai.js            # Handles AI prediction panel logic and API calls
+├── data.js          # Manages data fetching and transformation
+├── logs.js          # Handles log window updates and event triggers
+├── dynamic.js       # UI interactivity and dynamic DOM updates
+├── index.html       # Main dashboard layout and structure
+├── style.css        # Custom styles (if present)
+├── table.db         # Local database for frontend (if used)
+├── api-doc.md/html  # API documentation for frontend consumption
+├── portfolio/       # Additional UI pages (e.g., portfolio)
+├── update/          # Update prompts and documentation
+└── .env/.gitignore  # Environment/config files
+
+MAIN UI COMPONENTS
+- Dashboard: Central panel displaying real-time metrics for battery, grid, and generator.
+- Log Window: Event log display, filtering, and updates based on backend events.
+- AI Prediction Panel: Displays AI-driven predictions for battery health and system metrics.
+
+STATE MANAGEMENT APPROACH
+- State managed via JavaScript variables and objects (no Redux/MobX).
+- UI updates triggered by API responses and user actions.
+- Data fetched using periodic polling and updated dynamically.
+
+EVENT HANDLING & TRIGGERS
+- Log Window updates on backend events (e.g., grid ON/OFF, generator ON/OFF).
+- Dashboard refreshes on polling intervals or user actions.
+- AI Prediction Panel updates when predictions are retrieved.
+- All event handling managed through custom JavaScript functions and listeners.
+
+
+====================================================
+4. BACKEND DOCUMENTATION
+====================================================
+
+FRAMEWORK / LANGUAGE USED
+- Python 3.x
+- Flask (REST API server)
+- Machine Learning: scikit-learn, pandas (for advanced/future predictions)
+- Supabase (PostgreSQL cloud database)
+
+FILE / FOLDER STRUCTURE
+PERWER/
+├── app.py            # Main Flask application, API routing
+├── models.py         # Data models and schema definitions
+├── prediction.py     # Rule-based SOC/SOH prediction logic
+├── requirements.txt  # Python dependencies
+├── README.md         # Project overview and setup
+├── test_request.py   # API endpoint testing
+├── arrange/          # Model training and prediction utilities
+│   ├── app.py
+│   ├── model_predictor.py
+│   ├── soc_model.pkl # Trained ML model (future/optional)
+│   ├── train_model.py
+│   ├── Datasets/
+│   │   └── battery_dataset.csv
+│   └── docs/
+│       └── SOC_doc.txt
+└── __pycache__/      # Compiled Python cache files
+
+ENDPOINTS
+--------------------------------------------------------------------
+| Endpoint     | Purpose                                    | Input        | Output                |
+|--------------|--------------------------------------------|--------------|-----------------------|
+| /api/data    | Post data to backend, upload to Supabase   | JSON metrics | Success/Error message |
+| /predict     | Get battery predictions (SOC/SOH)          | JSON metrics | JSON predictions      |
+| /train       | Train/update AI model (future)             | CSV/JSON     | Training result       |
+
+DATABASE MODELS
+- Supabase (PostgreSQL) is used for persistent storage of battery, grid, and event data.
+- Data is posted via `/api/data` endpoint and uploaded to Supabase.
+- No local relational DB used; Supabase manages all persistence.
+
+SERVICES
+- Log Processor: Generates and manages event logs based on system triggers.
+- Rule-Based Prediction Service: Calculates SOC and SOH in prediction.py.
+- Supabase Integration: Handles data upload/retrieval from Supabase.
+- Model Trainer: Scripts for training/updating battery prediction models (optional, future).
+
+
+====================================================
+5. DATA HANDLING
+====================================================
+
+EXAMPLE PAYLOAD SENT TO FRONTEND
+{
+  "SOC": 78.5,
+  "SOH": 95.2,
+  "pv_power_w": 3200,
+  "grid_status": "ON",
+  "generator_status": "OFF",
+  "battery_voltage": 52.3,
+  "timestamp": "2025-08-28T14:32:00Z"
+}
+
+FIELD DESCRIPTIONS
+- SOC: State of Charge (%), rule-based calculation
+- SOH: State of Health (%), rule-based calculation
+- pv_power_w: Solar panel power output (watts)
+- grid_status: Grid connection status (ON/OFF)
+- generator_status: Generator status (ON/OFF)
+- battery_voltage: Current battery voltage (V)
+- timestamp: ISO 8601 formatted record time
+
+LOG GENERATION
+- Logs are created on key events:
+  * Grid ON/OFF
+  * Generator ON/OFF
+  * Battery charge/discharge events
+  * Solar activity
+- Each log entry includes:
+  * Event type (e.g., grid ON)
+  * Timestamp
+  * Relevant metrics (SOC, SOH, etc.)
+- Logs are stored in Supabase and retrievable via `/logs` endpoint
+  (supports filtering by event type or time range).
+
+AI PREDICTIONS
+- SOC and SOH are computed using rule-based thresholds in prediction.py
+- Backend process:
+  1. Parse incoming metrics
+  2. Apply rule-based logic
+  3. Return SOC and SOH predictions as JSON
+- Predictions are displayed in the frontend’s AI Panel and updated in real-time.
+
+
+====================================================
+6. USAGE GUIDE
+====================================================
+
+USER INTERACTION WALKTHROUGH
+
+Login / Access Dashboard
+- Users access via the frontend web dashboard.
+- No authentication required (unless implemented in future).
+
+DASHBOARD OVERVIEW
+- Displays real-time metrics for:
+  * Battery
+  * Grid
+  * Solar
+  * Generator
+- Key values (SOC, SOH, pv_power_w, grid_status, etc.) update dynamically.
+
+VIEWING LOGS
+- The Log Window shows chronological system events.
+- Events include: grid ON/OFF, generator ON/OFF, charge/discharge.
+- Users can filter logs by type or time.
+- Logs refresh automatically as new data arrives.
+
+AI PREDICTION PANEL
+- Displays SOC and SOH predictions.
+- Updates in real-time as backend sends new data.
+- Predictions also refresh on manual triggers (user refresh).
+
+TRIGGERING ACTIONS
+- Users can manually refresh dashboard data.
+- All data and predictions fetched via backend APIs.
+
+WHAT USERS SEE
+- Dashboard: Live system status overview.
+- Logs: Historical list of operational events with timestamps.
+- AI Predictions: Up-to-date SOC and SOH with clear indicators.
+
+EXAMPLE USER FLOW
+1. User opens dashboard and sees live metrics.
+2. User checks logs to verify system events.
+3. User views AI predictions for battery health.
+4. (Future) User exports logs or predictions for analysis.
+
+====================================================
+7. Future Improvements
+====================================================
+
+PLANNED FEATURES
+
+- USER AUTHENTICATION & PERSONALIZATION 
+    Implement secure login using device ID or user credentials.
+    Personalize dashboard and data views based on user/device profile.
+    Enable role-based access for different user types (admin, technician, viewer).
+
+- ADVANCED AI PREDICTIVE ANALYSIS
+    Integrate machine learning models to forecast potential hazards (e.g., battery failure, grid instability).
+    Predict optimal energy management actions for cost savings and safety.
+    Enable anomaly detection for early warning and preventive maintenance.
+
+- ENHANCED LOG SYSTEM
+    Track and record detailed behavior and usage of PERWER hardware and third-party devices (e.g., cell towers, inverters).
+    Support historical log filtering, advanced search, and export to CSV.
+    Visualize log trends and patterns for operational insights.
+
+NOTIFICIATION & ALERT SYSTEM
+    Real-time notifications for critical events, system warnings, and maintenance reminders.
+    Customizable alert thresholds for different metrics (SOC, SOH, grid status, etc.).
+    Multi-channel alerts (dashboard, email, SMS, push notifications).
+
+PERFORMANCE & SCALABILITY CONSIDERATIONS
+- Optimize backend for high-frequency data ingestion and real-time analytics.
+- Scale Supabase/PostgreSQL for large datasets and concurrent users.
+- Implement caching and efficient API pagination for faster dashboard updates.
+- Plan for distributed deployment to support multiple sites/devices.
+
+ADDITIONAL IDEAS
+Automated reporting and analytics for stakeholders.
