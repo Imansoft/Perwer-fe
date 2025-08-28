@@ -1,5 +1,6 @@
 
 import { processPayload } from './logs.js';
+import { generatePredictions } from './ai.js';
 
 const SUPABASE_URL = 'https://azejxtkohlvcufcloovc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6ZWp4dGtvaGx2Y3VmY2xvb3ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NjA2NTMsImV4cCI6MjA2OTEzNjY1M30.6Ex47MtN4ssNiOvd1XOSWZ1ttC-RJ2Pjb6KyMmvVzrU';
@@ -45,6 +46,19 @@ async function fetchAndUpdateDashboard() {
     const logsWindow = document.getElementById('logs-window');
     if (logsWindow) {
         logsWindow.textContent = logsArray.join('\n');
+    }
+
+    // Update AI Predictions Panel
+    const predictions = generatePredictions(current);
+    const aiList = document.getElementById('ai-predictions-list');
+    if (aiList) {
+        aiList.innerHTML = '';
+        predictions.forEach(pred => {
+            const li = document.createElement('li');
+            li.className = 'bg-perwer-light rounded-lg px-3 py-2 text-gray-800 flex items-center';
+            li.textContent = pred;
+            aiList.appendChild(li);
+        });
     }
 }
 
