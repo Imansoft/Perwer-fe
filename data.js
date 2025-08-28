@@ -1,12 +1,14 @@
 import { processPayload } from './logs.js';
 import { generatePredictions } from './ai.js';
 
-// Inactivity timer logic
+// Inactivity logic
 let lastDataTimestamp = null;
 let inactivityTimer = null;
+let totalInactivityTimer = null;
+let lastSafeData = null;
 
 function resetDashboardForInactivity() {
-    // Reset dashboard
+    // Per-metric fallback: set all fields to '---'/'OFF'
     if (window.updateDashboard) {
         window.updateDashboard({
             generator_status: "OFF",
@@ -26,19 +28,27 @@ function resetDashboardForInactivity() {
             SOC: '---'
         });
     }
-    // Clear logs
+}
+
+function clearLogsAndAI() {
+    // Clear logs and show faint placeholder
     const logsWindow = document.getElementById('logs-window');
-    if (logsWindow) logsWindow.textContent = '';
-    // Clear AI predictions
+    if (logsWindow) logsWindow.textContent = 'Device Off';
+    // Hide AI predictions
     const aiList = document.getElementById('ai-predictions-list');
     if (aiList) aiList.innerHTML = '';
-// ...existing code...
+}
 
 function startInactivityTimer() {
     if (inactivityTimer) clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
         resetDashboardForInactivity();
     }, 5 * 60 * 1000); // 5 minutes
+    // Start total inactivity timer for logs/AI
+    if (totalInactivityTimer) clearTimeout(totalInactivityTimer);
+    totalInactivityTimer = setTimeout(() => {
+        clearLogsAndAI();
+    }, 10 * 60 * 1000); // 10 minutes
 }
 
 
@@ -67,7 +77,7 @@ async function fetchAndUpdateDashboard() {
     if (!lastDataTimestamp || updatedAt > lastDataTimestamp) {
         lastDataTimestamp = updatedAt;
 
-        // Call updateDashboard in dynamic.js
+        // Per-metric fallback for missing fields
         const dashboardFields = [
             'generator_status', 'generator_uptime_h',
             'grid_status', 'grid_uptime_h',
@@ -78,8 +88,9 @@ async function fetchAndUpdateDashboard() {
         ];
         const safeData = {};
         dashboardFields.forEach(field => {
-            safeData[field] = (current[field] !== undefined && current[field] !== null && current[field] !== '') ? current[field] : '---';
+            safeData[field] = (current[field] !== undefined && current[field] !== null && current[field] !== '') ? current[field] : (field.endsWith('_status') ? 'OFF' : '---');
         });
+        lastSafeData = safeData;
         if (window.updateDashboard) window.updateDashboard(safeData);
 
         // Update Logs Window
@@ -104,7 +115,6 @@ async function fetchAndUpdateDashboard() {
 
         startInactivityTimer();
     }
-}
 }
 
 // Initial fetch
