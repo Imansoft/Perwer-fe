@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perwer | Predictive Monitoring Dashboard</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-left">
+            <div class="logo">
+                <img src="./perwer.png" alt="PERWER Logo" class="logo-image">
+                <div class="logo-text">
+                    <span class="logo-main">PERWER Dashboard</span>
+                    <span class="logo-subtitle">Energy Monitoring & AI System</span>
+                </div>
+            </div>
+            <nav>
+            </nav>
+        </div>
+        <div class="last-updated">Last updated: --:--</div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        
+        <!-- SCREEN 1: FLEET OVERVIEW -->
+        <div id="screen-fleet" class="screen active">
+            <div id="fleet-overview-content"></div>
+        </div>
+
+        <!-- SCREEN 2: SITE DETAIL -->
+        <div id="screen-detail" class="screen">
+            <div id="site-detail-content"></div>
+        </div>
+
+        <!-- SCREEN 3: INSIGHTS -->
+        <div id="screen-insights" class="screen">
+            <div id="insights-content"></div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>

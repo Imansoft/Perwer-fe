@@ -36,12 +36,37 @@
     <!-- Logs Window -->
     <div class="flex-1 bg-gray-900 rounded-xl shadow-lg p-4 overflow-y-auto max-h-[19rem] min-h-[14rem]">
       <h2 class="text-perwer font-semibold text-lg mb-2 flex items-center"><span class="mr-2">📝</span>Logs Window</h2>
-      <pre id="logs-window" class="text-sm text-gray-100 font-mono leading-relaxed pb-3 pr-3"></pre>
+      <pre id="logs-window" class="text-sm text-gray-100 font-mono leading-relaxed pb-3 pr-3">[14:32:15] System initialized
+[14:32:16] Connected to Supabase
+[14:32:18] Loading sensor data...
+[14:32:19] Battery SOC: 72%
+[14:32:20] Solar generation: 890W
+[14:32:21] Load power: 2.4W
+[14:32:22] Grid status: ON (24.5h uptime)
+[14:32:23] AI predictions updated
+[14:32:24] Dashboard ready</pre>
     </div>
     <!-- AI Insights Panel -->
     <div class="flex-1 bg-gray-900 rounded-xl shadow-lg p-4 min-h-[14rem]">
       <h2 class="text-perwer-dark font-semibold text-lg mb-2 flex items-center"><span class="mr-2">🤖</span>AI Insights</h2>
-      <ul id="ai-predictions-list" class="space-y-3"></ul>
+      <ul id="ai-predictions-list" class="space-y-3">
+        <li class="bg-gray-800 rounded-lg p-3 text-sm text-gray-100 border-l-4 border-perwer-dark">
+          <span class="font-semibold text-perwer">🔋 Battery Forecast</span><br>
+          SOC will reach 85% in ~2.5h based on current solar generation
+        </li>
+        <li class="bg-gray-800 rounded-lg p-3 text-sm text-gray-100 border-l-4 border-green-500">
+          <span class="font-semibold text-green-400">✓ System Optimal</span><br>
+          All parameters within healthy ranges - 92% efficiency
+        </li>
+        <li class="bg-gray-800 rounded-lg p-3 text-sm text-gray-100 border-l-4 border-orange-500">
+          <span class="font-semibold text-orange-400">⚠️ Load Alert</span><br>
+          Predicted peak load at 18:00, ensure battery is fully charged
+        </li>
+        <li class="bg-gray-800 rounded-lg p-3 text-sm text-gray-100 border-l-4 border-blue-500">
+          <span class="font-semibold text-blue-400">⚡ Runtime Analysis</span><br>
+          At current load, battery can sustain ~150 hours of operation
+        </li>
+      </ul>
     </div>
   </section> 
 
@@ -113,8 +138,9 @@
   </section>
 
   <!-- JS for mock state and dynamic updates -->
-  <script type="module" src="dynamic.js"></script>
+  <!-- Commented out for static demo -->
+  <!-- <script type="module" src="dynamic.js"></script>
   <script type="module" src="data.js"></script>
-  <script type="module" src="ai.js"></script>
+  <script type="module" src="ai.js"></script> -->
 </body>
 </html>

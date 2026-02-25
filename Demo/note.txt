@@ -1,0 +1,430 @@
+PERWER — Demo Web App Product Specification (Frontend-Only)
+
+Version: Investor Demo MVP
+Architecture: Static Frontend (HTML + CSS + Vanilla JS)
+Purpose: High-fidelity visual demonstration of Perwer’s monitoring and predictive intelligence.
+
+0. Important Implementation Note
+
+This demo is:
+
+✅ Frontend only
+✅ Rule-based logic
+✅ Uses mock data
+✅ No real hardware integration
+✅ No Python backend (for now)
+
+Future production system will include:
+
+Python backend
+
+Real hardware ingestion
+
+API pipelines
+
+Real predictive models
+
+1. Demo Goals
+
+The demo must clearly show investors:
+
+Multi-site monitoring
+
+Asset visibility
+
+Risk detection
+
+Predictive maintenance
+
+Cost optimization intelligence
+
+Speed and clarity > technical depth.
+
+2. Demo Architecture
+Tech Stack (STRICT)
+
+Frontend only:
+
+HTML5
+
+CSS3 (or Tailwind optional)
+
+Vanilla JavaScript
+
+Static JSON mock data
+
+❌ No Django
+❌ No database
+❌ No authentication (optional fake login only if you want polish)
+
+3. Demo Data Strategy
+
+You will preload 3–5 realistic sites with different scenarios.
+
+Required Site Scenarios
+Site 1 — Healthy Site
+
+Purpose: show normal operations
+
+Characteristics:
+
+Battery healthy (>90%)
+
+Solar active
+
+Generator mostly off
+
+Health score: 85–95%
+
+Status: 🟢 Healthy
+
+Site 2 — Battery Degradation Risk
+
+Purpose: show predictive maintenance
+
+Characteristics:
+
+Battery health ~60–70%
+
+Estimated failure days visible
+
+Health score: ~70%
+
+Status: 🟡 At Risk
+
+Insight: "Battery likely to degrade soon"
+
+Site 3 — Generator Inefficiency
+
+Purpose: show cost optimization value
+
+Characteristics:
+
+Battery high (>85%)
+
+Generator running unnecessarily
+
+Health score: ~65%
+
+Status: 🟡 At Risk
+
+Insight: "Generator running while battery full"
+
+Site 4 — Critical Site
+
+Purpose: create urgency for investors
+
+Characteristics:
+
+Battery low (<40%)
+
+Diesel low
+
+Multiple alerts
+
+Health score: <50%
+
+Status: 🔴 Critical
+
+(Optional) Site 5 — Solar Underperformance
+
+Nice-to-have scenario.
+
+4. Screen Structure (FINAL)
+
+Your demo will have 3 main views.
+
+SCREEN 1 — Fleet Overview
+Purpose
+
+Give executives instant situational awareness.
+
+Components
+Top KPI Bar
+
+Display:
+
+Total Sites
+
+Healthy Sites
+
+At-Risk Sites
+
+Critical Sites
+
+(All computed via JS from mock data.)
+
+Site Cards Grid
+
+Each site card shows:
+
+Site Name
+
+Location
+
+Site Type
+
+Health Score (%)
+
+Status Badge color
+
+Small alert indicator (if issues exist)
+
+Interactions
+
+User can:
+
+Click site card → opens Site Detail
+
+Filter by status (JS filter)
+
+Search by site name
+
+Health Score (Rule-Based Demo Logic)
+
+In JS, compute score like:
+
+healthScore =
+  (batteryHealth * 0.4) +
+  (solarScore * 0.3) +
+  (generatorScore * 0.3);
+
+Where:
+
+batteryHealth = battery %
+
+solarScore = 100 if solar ON else 40
+
+generatorScore penalizes bad behavior
+
+Status Mapping
+if (healthScore >= 80) → Healthy
+if (healthScore >= 60) → At Risk
+else → Critical
+SCREEN 2 — Site Detail View
+Purpose
+
+Show deep operational visibility.
+
+Section A — Site Header
+
+Display:
+
+Site Name
+
+Location
+
+Health Score
+
+Status Badge
+
+Section B — Asset Cards
+Solar Card
+
+Show:
+
+Number of panels
+
+Output (kW)
+
+Status (ON/OFF)
+
+Battery Card
+
+Show:
+
+Battery count
+
+Average charge (%)
+
+Health (%)
+
+Estimated days to failure (rule-based)
+
+Generator Card
+
+Show:
+
+ON/OFF
+
+Diesel level
+
+Runtime today
+
+Efficiency indicator
+
+Rule-Based Failure Estimate (Demo)
+if (batteryHealth < 70)
+  daysToFailure = randomBetween(120, 240);
+else
+  daysToFailure = null;
+Section C — Alerts Panel
+
+Populate alerts dynamically in JS.
+
+Example Rules
+
+Trigger alert if:
+
+batteryHealth < 65
+
+dieselLevel < 30
+
+generator ON while battery > 85
+
+solar OFF during daytime (optional wow)
+
+Each alert shows:
+
+Severity
+
+Message
+
+Timestamp (fake but realistic)
+
+SCREEN 3 — Insights & AI Recommendations
+
+⚠️ This is your investor magic screen.
+
+Block A — Executive Summary
+
+Generate plain English summary via JS rules.
+
+Example logic:
+
+if (batteryHealth < 70)
+  addSummary("Battery performance is degrading.");
+
+if (generatorRunning && batteryCharge > 85)
+  addSummary("Generator runtime is higher than optimal.");
+Block B — AI Recommendations
+
+Rule-based suggestions.
+
+Recommendation Rules
+
+Rule 1 — Battery Weak
+
+Condition:
+
+batteryHealth < 70
+
+Recommendation:
+
+Schedule battery replacement within X days.
+
+Priority: High
+
+Rule 2 — Generator Waste
+
+Condition:
+
+generatorOn && batteryCharge > 85
+
+Recommendation:
+
+Reduce generator runtime to save diesel costs.
+
+Priority: High
+
+Rule 3 — Low Diesel
+
+Condition:
+
+dieselLevel < 30
+
+Recommendation:
+
+Refill diesel within 48 hours.
+
+Priority: Medium
+
+Block C — Event Log (Optional but STRONG)
+
+Static but realistic timeline:
+
+Generator started
+
+Battery dipped
+
+Solar resumed
+
+Investors love timelines.
+
+5. Mock Data Structure (Frontend JSON)
+
+Create file:
+
+/data/sites.json
+
+Structure:
+
+{
+  "sites": [
+    {
+      "id": "SITE-001",
+      "name": "Lagos-Ikeja Tower",
+      "location": "Lagos, Nigeria",
+      "type": "Telecom Tower",
+      "batteryHealth": 92,
+      "batteryCharge": 88,
+      "solarOn": true,
+      "solarOutput": 4.5,
+      "generatorOn": false,
+      "dieselLevel": 78,
+      "runtimeToday": 1.2
+    }
+  ]
+}
+6. Visual Design Direction
+Tone
+
+Dark dashboard
+
+Industrial
+
+Mission-critical
+
+Executive clean
+
+Color System
+
+Green → Healthy
+
+Yellow → Warning
+
+Red → Critical
+
+Blue → Info
+
+7. Demo Polish Features (High ROI)
+
+If you have time, add:
+
+Smooth card hover
+
+Animated health bars
+
+Pulsing critical alerts
+
+Fake "Last updated: 2 min ago"
+
+Loading shimmer
+
+These massively improve investor perception.
+
+8. Demo Success Checklist
+
+Before demo day, confirm:
+
+Sites show mixed health states
+
+At least one predictive warning visible
+
+At least one cost optimization insight
+
+Navigation is smooth
+
+Numbers look realistic
+
+No empty screens
